@@ -1,5 +1,5 @@
 require("dotenv").config();
-//const routes = require("./routes/index");
+const routes = require("./routes/index");
 const express = require("express");
 const cookieSession = require("cookie-session");
 const cors = require("cors");
@@ -60,3 +60,9 @@ mongoose
     console.log(e);
   });
 mongoose.set("strictQuery", false);
+
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
+  console.log(`Server runs at port: ${port}...`);
+});
