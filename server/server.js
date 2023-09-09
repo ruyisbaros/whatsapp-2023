@@ -15,8 +15,8 @@ app.use(
     //domain: "https://ineedsomething.org",
     keys: [`${process.env.KEY_ONE}`, `${process.env.KEY_TWO}`],
     maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
-    secure: true,
-    //secure: process.env.NODE_ENV === "production",
+    //secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "none", //use for production
   })
 );
@@ -60,6 +60,10 @@ mongoose
     console.log(e);
   });
 mongoose.set("strictQuery", false);
+
+//Routes
+app.use("", routes.healthRoutes);
+app.use("/api/v3/auth", routes.authRoutes);
 
 const port = process.env.PORT || 5000;
 
