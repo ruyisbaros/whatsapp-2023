@@ -2,6 +2,7 @@ require("dotenv").config();
 const routes = require("./routes/index");
 const express = require("express");
 const cookieSession = require("cookie-session");
+//const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -34,7 +35,7 @@ app.use(
     //sameSite: "none", //use for production
   })
 );
-
+//app.use(cookieParser());
 app.use(
   cors({
     origin: `${process.env.FRONT_URL}`,
