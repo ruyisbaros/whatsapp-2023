@@ -1,6 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .customh1 {
+    @apply text-blue-500;
+  }
+}
 * {
   margin: 0;
   padding: 0;
