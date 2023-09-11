@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 const { createJsonToken, createReFreshToken } = require("../utils/createToken");
@@ -95,6 +96,31 @@ const authCtrl = {
   },
   refreshToken: async (req, res) => {
     try {
+      const token = req.session?.jwtR;
+      //console.log(req.session, token)
+      if (!token)
+        return res.status(500).json({ message: "Please login again" });
+      const { id } = jwt.verify(token, `${process.env.JWT_REFRESH_KEY}`);
+      if (!id) return res.status(500).json({ message: "Please login again" });
+
+      const user = await User.findOne({ _id: id }).select("-password");
+      //console.log(user)
+      if (!user)
+        return res
+          .status(500)
+          .json({ message: "This account does not exist!" });
+      //console.log(user)
+      const access_token = await createJsonToken(
+        { id: user._id, email: user.email },
+        "1d"
+      );
+      //console.log(req.session)
+      req.session = {
+        jwtR: token,
+        jwt: access_token,
+      };
+
+      res.status(200).json(user);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
