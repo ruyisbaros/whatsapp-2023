@@ -106,21 +106,27 @@ const authCtrl = {
       const user = await User.findOne({ _id: id }).select("-password");
       //console.log(user)
       if (!user)
-        return res
-          .status(500)
-          .json({ message: "This account does not exist!" });
+        return res.status(500).json({ message: "Please login again!" });
       //console.log(user)
       const access_token = await createJsonToken(
         { id: user._id, email: user.email },
         "1d"
       );
-      //console.log(req.session)
       req.session = {
         jwtR: token,
         jwt: access_token,
       };
+      //console.log(req.session)
 
-      res.status(200).json(user);
+      res.status(200).json({
+        user: {
+          id: user._id,
+          email: user.email,
+          name: user.name,
+          picture: user.picture,
+          status: user.status,
+        },
+      });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
