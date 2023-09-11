@@ -2,15 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 //import Cookies from "js-cookie";
 const user = window.localStorage.getItem("registeredUser");
 const initialState = {
-  loggedUser: user
-    ? JSON.parse(user)
-    : {
-        id: "",
-        name: "",
-        email: "",
-        picture: "",
-        status: "",
-      },
+  loggedUser: user ? JSON.parse(user) : null,
   status: "",
   error: "",
 };
@@ -21,13 +13,7 @@ const currentUSlicer = createSlice({
   reducers: {
     reduxLogout: (state, action) => {
       state.status = "";
-      state.loggedUser = {
-        id: "",
-        name: "",
-        email: "",
-        picture: "",
-        status: "",
-      };
+      state.loggedUser = null;
     },
     reduxRegisterUser: (state, action) => {
       const { id, email, name, picture, status } = action.payload;

@@ -6,16 +6,22 @@ const {
   createReFreshToken,
   verifyRefreshToken,
 } = require("../utils/createToken");
+const { uploadImageToCloduinary } = require("../services/cloudinaryActions");
 
 const authCtrl = {
   register: async (req, res) => {
     try {
       const { name, email, password, picture, status } = req.body;
+      let image;
+      if (picture) {
+        image = await uploadImageToCloduinary(picture, "whatsapp_api");
+      }
       const newUser = await User.create({
         name: name.toLowerCase(),
         email: email.toLowerCase(),
         password,
-        picture: picture ? picture : process.env.DEFAULT_PICTURE,
+        picture: picture ? image.url : process.env.DEFAULT_PICTURE,
+
         status: status ? status : process.env.DEFAULT_STATUS,
       });
       const token = await createJsonToken(

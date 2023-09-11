@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "../utils/validadion";
@@ -9,10 +9,15 @@ import { Link } from "react-router-dom";
 import axios from "../axios";
 import { toast } from "react-toastify";
 import { reduxRegisterUser } from "../redux/currentUserSlice";
+import { useNavigate } from "react-router-dom";
+import Picture from "./Picture";
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [status, setStatus] = useState(false);
+  const [blobPicture, setBlobPicture] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -23,21 +28,25 @@ const RegisterForm = () => {
   const handleRegister = async (value) => {
     try {
       setStatus(true);
-      const { data } = await axios.post("/auth/register", { ...value });
+      const { data } = await axios.post("/auth/register", {
+        ...value,
+        picture: blobPicture ? blobPicture : "",
+      });
       console.log(data);
       setStatus(false);
       window.localStorage.setItem("registeredUser", JSON.stringify(data.user));
       dispatch(reduxRegisterUser(data.user));
       toast.success(data.message);
+      navigate("/");
     } catch (error) {
       setStatus(false);
       toast.error(error.response.data.message);
     }
   };
   return (
-    <div className="h-screen w-full flex items-center justify-center overflow-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center overflow-hidden">
       {/* register form body */}
-      <div className="max-w-md space-y-8 p-10 dark:bg-dark_bg_2 rounded-xl">
+      <div className=" w-full max-w-md space-y-8 p-10 dark:bg-dark_bg_2 rounded-xl">
         {/* heading */}
         <div className="text-center dark:text-dark_text_1">
           <h2 className="mt-6 text-3xl font-bold">Welcome</h2>
@@ -65,7 +74,7 @@ const RegisterForm = () => {
           <CustomAuthInput
             name="status"
             type="text"
-            placeholder="Your Status"
+            placeholder="Your Status (optional)"
             register={register}
             error={errors?.status?.message}
           />
@@ -76,7 +85,8 @@ const RegisterForm = () => {
             register={register}
             error={errors?.password?.message}
           />
-
+          {/* Picture */}
+          <Picture blobPicture={blobPicture} setBlobPicture={setBlobPicture} />
           <button
             className="w-full flex justify-center bg-green_1 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:outline-none hover:bg-green_2 transition ease-in duration-300 shadow-lg cursor-pointer"
             type="submit"
