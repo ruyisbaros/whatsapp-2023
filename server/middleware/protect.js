@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
+const { verifyAccessToken } = require("../utils/createToken");
 
 exports.protect = async (req, res, next) => {
   try {
@@ -8,8 +9,7 @@ exports.protect = async (req, res, next) => {
     if (!token) {
       return res.status(400).json({ message: "You should sign in!" });
     }
-    //base64.decode(token).split()
-    const { id } = jwt.verify(token, `${process.env.JWT_ACCESS_KEY}`);
+    const { id } = await verifyAccessToken(token);
     if (!id) {
       return res.status(401).json({ message: "Invalid credentials!" });
     }

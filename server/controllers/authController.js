@@ -1,7 +1,11 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
-const { createJsonToken, createReFreshToken } = require("../utils/createToken");
+const {
+  createJsonToken,
+  createReFreshToken,
+  verifyRefreshToken,
+} = require("../utils/createToken");
 
 const authCtrl = {
   register: async (req, res) => {
@@ -100,7 +104,7 @@ const authCtrl = {
       //console.log(req.session, token)
       if (!token)
         return res.status(500).json({ message: "Please login again" });
-      const { id } = jwt.verify(token, `${process.env.JWT_REFRESH_KEY}`);
+      const { id } = await verifyRefreshToken(token);
       if (!id) return res.status(500).json({ message: "Please login again" });
 
       const user = await User.findOne({ _id: id }).select("-password");

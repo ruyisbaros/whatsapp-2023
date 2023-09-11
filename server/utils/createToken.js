@@ -37,3 +37,25 @@ exports.createReFreshToken = async (payload, expired) => {
     );
   });
 };
+exports.verifyAccessToken = async (token) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, `${process.env.JWT_ACCESS_KEY}`, (error, payload) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(payload);
+      }
+    });
+  });
+};
+exports.verifyRefreshToken = async (token) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, `${process.env.JWT_REFRESH_KEY}`, (error, payload) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(payload);
+      }
+    });
+  });
+};

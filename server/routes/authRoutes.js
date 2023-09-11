@@ -14,7 +14,7 @@ router.get("/refresh_token", authCtrl.refreshToken);
 
 //Protect test
 router.get("/protect_test", protect, async (req, res) => {
-  res.send("Test passed");
+  res.send(req.user);
 });
 
 module.exports = router;
