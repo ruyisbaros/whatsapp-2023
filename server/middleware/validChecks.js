@@ -1,7 +1,7 @@
 const { validateEmail, validateLength } = require("../utils/validation");
 
 exports.validateRegister = async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, status } = req.body;
 
   if (!name) {
     return res.status(500).json({ message: "Please provide your name!" });
@@ -26,6 +26,11 @@ exports.validateRegister = async (req, res, next) => {
     return res
       .status(500)
       .json({ message: "Password must be minimum 6 chars!" });
+  }
+  if (status.length > 64) {
+    return res
+      .status(500)
+      .json({ message: "Status must be max 64 characters" });
   }
   next();
 };
