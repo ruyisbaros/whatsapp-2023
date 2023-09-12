@@ -21,7 +21,6 @@ const authCtrl = {
         email: email.toLowerCase(),
         password,
         picture: picture ? image.url : process.env.DEFAULT_PICTURE,
-
         status: status ? status : process.env.DEFAULT_STATUS,
       });
       const token = await createJsonToken(

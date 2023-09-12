@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import LoggedInRoutes from "./ristrict_routes/LoggedInRoutes";
 import NotLoggedInRoutes from "./ristrict_routes/NotLoggedInRoutes";
+import RegisteredRoutes from "./ristrict_routes/RegisteredRoutes";
 
 const App = () => {
   return (
@@ -19,7 +20,9 @@ const App = () => {
         <Route element={<NotLoggedInRoutes />}>
           <Route path="/login" element={<Login />} />
         </Route>
-        <Route path="/register" element={<Register />} />
+        <Route element={<RegisteredRoutes />}>
+          <Route path="/register" element={<Register />} />
+        </Route>
       </Routes>
     </div>
   );

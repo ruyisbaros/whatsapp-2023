@@ -32,12 +32,18 @@ const RegisterForm = () => {
         ...value,
         picture: blobPicture ? blobPicture : "",
       });
-      console.log(data);
-      setStatus(false);
-      window.localStorage.setItem("registeredUser", JSON.stringify(data.user));
-      dispatch(reduxRegisterUser(data.user));
-      toast.success(data.message);
-      navigate("/");
+      if (data.user.id) {
+        console.log(data);
+        setStatus(false);
+        window.localStorage.setItem(
+          "registeredUser",
+          JSON.stringify(data.user)
+        );
+        dispatch(reduxRegisterUser(data.user));
+        toast.success(data.message);
+      } else {
+        toast.error("Something went wrong! Please try again.");
+      }
     } catch (error) {
       setStatus(false);
       toast.error(error.response.data.message);
