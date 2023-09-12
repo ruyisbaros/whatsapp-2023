@@ -19,7 +19,7 @@ const conversationCtrl = {
         sender_id,
         receiver_id
       );
-      //If not yet created, create it
+      //If not yet conversation between these users, create it and send
       if (!exist_conversation) {
         let newConversation = await ConversationModel.create({
           name: withChatUser.name,
@@ -28,7 +28,7 @@ const conversationCtrl = {
         });
         newConversation = await newConversation.populate("users", "-password");
         res.status(200).json(newConversation);
-        //If created, send it
+        //If has, send it
       } else {
         res.status(200).json(exist_conversation);
       }
@@ -47,7 +47,7 @@ const conversationCtrl = {
           path: "latestMessage",
           model: "Message",
           populate: {
-            path: "latestMessage.sender",
+            path: "sender",
             model: "User",
           },
         })

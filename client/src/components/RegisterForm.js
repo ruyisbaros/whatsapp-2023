@@ -9,11 +9,9 @@ import { Link } from "react-router-dom";
 import axios from "../axios";
 import { toast } from "react-toastify";
 import { reduxRegisterUser } from "../redux/currentUserSlice";
-import { useNavigate } from "react-router-dom";
 import Picture from "./Picture";
 
 const RegisterForm = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [status, setStatus] = useState(false);
   const [blobPicture, setBlobPicture] = useState("");
