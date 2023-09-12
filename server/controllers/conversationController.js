@@ -23,6 +23,7 @@ const conversationCtrl = {
       if (!exist_conversation) {
         let newConversation = await ConversationModel.create({
           name: withChatUser.name,
+          picture: withChatUser.picture,
           isGroup: false,
           users: [sender_id, receiver_id],
         });

@@ -8,6 +8,11 @@ const conversationSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    picture: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dmhcnhtng/image/upload/v1643044376/avatars/default_pic_jeaybr.png",
+    },
     isGroup: {
       type: Boolean,
       required: true,
