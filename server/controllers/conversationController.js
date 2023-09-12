@@ -6,7 +6,7 @@ const conversationCtrl = {
   create_open: async (req, res) => {
     try {
       const sender_id = req.user._id;
-      const { receiver_id, name } = req.body;
+      const { receiver_id } = req.body;
 
       if (!receiver_id) {
         return res.status(500).json({ message: `Something went wrong!` });
@@ -21,12 +21,14 @@ const conversationCtrl = {
       );
       //If not yet created, create it
       if (!exist_conversation) {
-        const newConversation = await ConversationModel.create({
+        let newConversation = await ConversationModel.create({
           name: withChatUser.name,
           isGroup: false,
           users: [sender_id, receiver_id],
         });
+        newConversation = await newConversation.populate("users", "-password");
         res.status(200).json(newConversation);
+        //If created, send it
       } else {
         res.status(200).json(exist_conversation);
       }
@@ -34,6 +36,39 @@ const conversationCtrl = {
       res.status(500).json({ message: error.message });
     }
   },
+  getMyConversations: async (req, res) => {
+    try {
+      let conversations = await ConversationModel.find({
+        users: { $elemMatch: { $eq: req.user._id } },
+      })
+        .populate("users", "-password")
+        .populate("admin", "-password")
+        .populate({
+          path: "latestMessage",
+          model: "Message",
+          populate: {
+            path: "latestMessage.sender",
+            model: "User",
+          },
+        })
+        .sort({ updatedAt: -1 });
+
+      res.status(200).json(conversations);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
 };
 
 module.exports = conversationCtrl;
+/* 
+.populate({
+          path: "latestMessage",
+          model: "Message",
+          populate: {
+            path: "latestMessage.sender",
+            model: "User",
+            select: "-password",
+          },
+        })
+*/

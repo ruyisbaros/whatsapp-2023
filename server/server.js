@@ -70,6 +70,7 @@ mongoose
     process.exit(1);
   });
 mongoose.set("strictQuery", false);
+mongoose.set("strictPopulate", false);
 
 //Routes
 app.use("", routes.healthRoutes);

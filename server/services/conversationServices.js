@@ -10,9 +10,12 @@ exports.isConversationExist = async (sId, rId) => {
   })
     .populate("users", "-password")
     .populate({
-      path: "latestMessage.sender",
-      model: "User",
-      select: "-password",
+      path: "latestMessage",
+      model: "Message",
+      populate: {
+        path: "latestMessage.sender",
+        model: "User",
+      },
     });
 
   return conversation[0];
