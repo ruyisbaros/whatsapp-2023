@@ -1,6 +1,5 @@
 const MessageModel = require("../models/messageModel");
 const ConversationModel = require("../models/conversationModel.js");
-const User = require("../models/userModel");
 
 const messageCtrl = {
   send_create_message: async (req, res) => {
@@ -11,7 +10,7 @@ const messageCtrl = {
         return res.status(500).json({ message: `Something went wrong!` });
       }
       //1-Create message document in DB
-      let createdMessage = await MessageModel.create({
+      const createdMessage = await MessageModel.create({
         message,
         sender: my_id,
         conversation: convo_id,
@@ -38,6 +37,14 @@ const messageCtrl = {
   },
   get_messages: async (req, res) => {
     try {
+      const { convId } = req.params;
+      if (!convId) {
+        return res.status(500).json({ message: `Something went wrong!` });
+      }
+      const messages = await MessageModel.find({
+        conversation: convId,
+      }).populate("sender", "-password");
+      res.status(200).json(messages);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
