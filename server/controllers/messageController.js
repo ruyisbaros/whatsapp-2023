@@ -1,5 +1,6 @@
 const MessageModel = require("../models/messageModel");
 const ConversationModel = require("../models/conversationModel.js");
+const User = require("../models/userModel");
 
 const messageCtrl = {
   send_create_message: async (req, res) => {
@@ -45,6 +46,17 @@ const messageCtrl = {
         conversation: convId,
       }).populate("sender", "-password");
       res.status(200).json(messages);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  searchChatUsers: async (req, res) => {
+    try {
+      const { search } = req.query;
+      const users = await User.find({
+        name: { $regex: search, $options: "i" },
+      }).select("-password");
+      res.status(200).json(users);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
