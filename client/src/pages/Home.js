@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { reduxGetMyConversations } from "../redux/chatSlice";
 import WhatsappHome from "../components/chat/WhatsappHome";
+import ActiveChat from "../components/chat/ActiveChat";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,8 @@ const Home = () => {
       setStatus(true);
       const { data } = await axios.get("/conversation/my_conversations");
       console.log(data);
-      dispatch(reduxGetMyConversations(data));
+      console.log(data.filter((dt) => dt.latestMessage));
+      dispatch(reduxGetMyConversations(data.filter((dt) => dt.latestMessage)));
       setStatus(false);
     } catch (error) {
       setStatus(false);
@@ -32,7 +34,7 @@ const Home = () => {
     <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center py-[19px]">
       <div className="container h-screen flex py-[19px]">
         <SidebarLeft />
-        {activeConversation ? "active" : <WhatsappHome />}
+        {activeConversation ? <ActiveChat /> : <WhatsappHome />}
       </div>
     </div>
   );
