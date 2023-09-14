@@ -5,7 +5,7 @@ import Login from "./../pages/Login";
 
 const LoggedInRoutes = () => {
   const { loggedUser } = useSelector((store) => store.currentUser);
-  console.log(loggedUser);
+  //console.log(loggedUser);
   return loggedUser ? <Outlet /> : <Login />;
 };
 

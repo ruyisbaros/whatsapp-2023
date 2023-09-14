@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import CustomAuthInput from "./CustomAuthInput";
-import { loginSchema } from "../utils/validadion";
+import CustomAuthInput from "../CustomAuthInput";
+import { loginSchema } from "../../utils/validadion";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
-import axios from "../axios";
+import axios from "../../axios";
 import { toast } from "react-toastify";
-import { reduxRegisterUser } from "../redux/currentUserSlice";
+import { reduxRegisterUser } from "../../redux/currentUserSlice";
 
 const LoginForm = () => {
   /* const navigate = useNavigate(); */

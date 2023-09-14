@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 const SidebarLeft = () => {
   const [searchResults, setSearchResults] = useState([]);
 
-  console.log(searchResults);
+  //console.log(searchResults);
   return (
     <div className="w-[40%] h-full min-h-screen select-none">
       <SideBarHeader />

@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { dateHandler } from "../utils/momentHandler";
+import axios from "../axios";
+import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { reduxSetActiveConversation } from "../redux/chatSlice";
 
 const SingleConversation = ({ convo }) => {
+  const dispatch = useDispatch();
+  const open_create_conversation = async () => {
+    try {
+      const { data } = await axios.post("conversation/open_create", {
+        receiver_id: convo?.users[1],
+      });
+      console.log(data);
+      dispatch(reduxSetActiveConversation(data));
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
   return (
-    <li className="list-none h-[72px] w-full dark:bg-dark_bg_1 hover:dark:bg-dark_bg_2 cursor-pointer dark:text-dark_text_1 px-[10px] rounded-lg">
+    <li
+      className="list-none h-[72px] w-full dark:bg-dark_bg_1 hover:dark:bg-dark_bg_2 cursor-pointer dark:text-dark_text_1 px-[10px] rounded-lg"
+      onClick={open_create_conversation}
+    >
       <div className="relative w-full flex items-center justify-between py-[10px]">
         {/* Left side (photo latest message etc) */}
         <div className="flex items-center gap-x-3">
@@ -21,7 +40,13 @@ const SingleConversation = ({ convo }) => {
             <div>
               <div className="flex items-center gap-x-1 dark:text-dark_text_2">
                 <div className="flex-1 items-center gap-x-1">
-                  <p>{convo.latestMessage.message}</p>
+                  <p>
+                    {convo.latestMessage
+                      ? convo.latestMessage.message.length > 26
+                        ? convo.latestMessage.message.slice(0, 26) + "..."
+                        : convo.latestMessage.message
+                      : ""}
+                  </p>
                 </div>
               </div>
             </div>
@@ -30,7 +55,9 @@ const SingleConversation = ({ convo }) => {
         {/* Right side */}
         <div className="flex flex-col items-end gap-y-4 text-xs">
           <span className="dark:text-dark_text_2">
-            {dateHandler(convo.latestMessage.createdAt)}
+            {convo.latestMessage
+              ? dateHandler(convo.latestMessage.createdAt)
+              : ""}
           </span>
         </div>
       </div>

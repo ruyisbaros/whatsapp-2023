@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 //const user = window.localStorage.getItem("registeredUser");
 const initialState = {
   conversations: [],
-  activeConversation: {},
+  activeConversation: null,
   notifications: [],
   userStatuses: [],
 };
