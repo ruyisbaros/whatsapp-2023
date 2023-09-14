@@ -16,7 +16,7 @@ const messageCtrl = {
         conversation: convo_id,
         files: files || [],
       });
-      //2. Update relevant conversation's latestMessage (each new message will be latestMessage)
+      //2. Update relevant conversation's latestMessage (each new message will be the latestMessage)
       await ConversationModel.findByIdAndUpdate(convo_id, {
         latestMessage: createdMessage,
       });

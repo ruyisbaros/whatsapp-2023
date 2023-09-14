@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CustomAuthInput from "./CustomAuthInput";
@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { reduxRegisterUser } from "../redux/currentUserSlice";
 
 const LoginForm = () => {
+  /* const navigate = useNavigate(); */
   const dispatch = useDispatch();
   const [status, setStatus] = useState(false);
 
@@ -25,6 +26,7 @@ const LoginForm = () => {
     try {
       setStatus(true);
       const { data } = await axios.post("/auth/login", { ...values });
+
       if (data.user.id) {
         console.log(data);
         setStatus(false);
@@ -40,6 +42,7 @@ const LoginForm = () => {
     } catch (error) {
       setStatus(false);
       toast.error(error.response.data.message);
+      console.log(error.response.data.message);
     }
   };
   return (
