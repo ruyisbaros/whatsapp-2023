@@ -54,7 +54,10 @@ const messageCtrl = {
     try {
       const { search } = req.query;
       const users = await User.find({
-        name: { $regex: search, $options: "i" },
+        $and: [
+          { name: { $regex: search, $options: "i" } },
+          { _id: { $ne: req.user._id } },
+        ],
       }).select("-password");
       res.status(200).json(users);
     } catch (error) {

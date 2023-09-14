@@ -62,3 +62,15 @@
   background: #444e54;
   border-radius: 3px;
 }
+/* Search results */
+.search_results {
+  position: absolute;
+  left: 10px;
+  top: 2.5rem;
+  height: 200px;
+  width: 76%;
+  background: #ddd;
+  z-index: 88;
+  box-shadow: 0 5px 5px 5px#222;
+  border-radius: 5px;
+}

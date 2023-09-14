@@ -27,8 +27,8 @@ const Home = () => {
   }, [fetchMyConversations]);
 
   return (
-    <div className="min-h-screen dark:bg-dark_bg_1 flex items-center justify-center py-[19px]">
-      <div className="container flex">
+    <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center py-[19px]">
+      <div className="container h-screen">
         <SidebarLeft />
       </div>
     </div>
