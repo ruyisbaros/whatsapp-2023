@@ -53,6 +53,9 @@ const messageCtrl = {
             path: "users",
             select: "-password",
           },
+          populate: {
+            path: "latestMessage",
+          },
         });
       res.status(201).json({ populatedMessage, conversations });
     } catch (error) {

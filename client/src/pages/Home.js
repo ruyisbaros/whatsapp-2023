@@ -10,7 +10,7 @@ import ActiveChat from "../components/chat/ActiveChat";
 const Home = () => {
   const dispatch = useDispatch();
   const { activeConversation } = useSelector((store) => store.messages);
-  const { loggedUser } = useSelector((store) => store.currentUser);
+  //const { loggedUser } = useSelector((store) => store.currentUser);
   const [status, setStatus] = useState(false);
 
   const fetchMyConversations = useCallback(async () => {

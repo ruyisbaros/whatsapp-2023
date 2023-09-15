@@ -41,6 +41,12 @@ const chatSlicer = createSlice({
     },
     reduxAddMyMessages: (state, action) => {
       state.messages.push(action.payload);
+      //Update latest message
+      state.conversations = state.conversations.map((c) =>
+        c._id === action.payload.conversation._id
+          ? { ...c, latestMessage: action.payload.conversation.latestMessage }
+          : c
+      );
     },
     reduxRemoveFromMyMessages: (state, action) => {
       state.messages.pop(action.payload);

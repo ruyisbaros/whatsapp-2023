@@ -3,26 +3,27 @@ import { AttachmentIcon, EmojiIcon, SendIcon } from "../../assets/svg";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios";
+import { ClipLoader, FadeLoader } from "react-spinners";
 import {
   reduxAddMyMessages,
   reduxGetMyConversations,
 } from "../../redux/chatSlice";
-//import ChatInput from "./ChatInput";
 
 const ChatActions = () => {
   const dispatch = useDispatch();
   const { activeConversation } = useSelector((store) => store.messages);
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState(false);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
     try {
+      setStatus(true);
       const { data } = await axios.post("/message/send", {
         message,
         convo_id: activeConversation._id,
       });
       console.log(data);
-      dispatch(reduxAddMyMessages(data.populatedMessage));
       if (data.conversations) {
         dispatch(
           reduxGetMyConversations(
@@ -30,9 +31,12 @@ const ChatActions = () => {
           )
         );
       }
-      //dispatch(reduxUpdateActiveConversation(message));
+      dispatch(reduxAddMyMessages(data.populatedMessage));
+
       setMessage("");
+      setStatus(false);
     } catch (error) {
+      setStatus(false);
       toast.error(error.response.data.message);
     }
   };
@@ -69,7 +73,11 @@ const ChatActions = () => {
         </div>
         {/* Send */}
         <button className="btn" type="submit">
-          <SendIcon className="dark:fill-dark_svg_1" />
+          {status ? (
+            <ClipLoader color="#e9edef" size={25} />
+          ) : (
+            <SendIcon className="dark:fill-dark_svg_1" />
+          )}
         </button>
       </div>
     </form>

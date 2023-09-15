@@ -8,7 +8,7 @@ import { reduxSetActiveConversation } from "../redux/chatSlice";
 const SingleConversation = ({ convo }) => {
   const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
-  //const { activeConversation } = useSelector((store) => store.messages);
+  const { activeConversation } = useSelector((store) => store.messages);
 
   const [ME, setME] = useState("");
   const [YOU, setYOU] = useState("");
@@ -38,7 +38,9 @@ const SingleConversation = ({ convo }) => {
   };
   return (
     <li
-      className="list-none h-[72px] w-full dark:bg-dark_bg_1 hover:dark:bg-dark_bg_2 cursor-pointer dark:text-dark_text_1 px-[10px] rounded-lg"
+      className={`list-none h-[72px] w-full dark:bg-dark_bg_1 hover:dark:bg-dark_bg_2 cursor-pointer dark:text-dark_text_1 px-[10px] rounded-lg ${
+        activeConversation._id === convo._id ? "dark:bg-dark_bg_2" : ""
+      }`}
       onClick={open_create_conversation}
     >
       <div className="relative w-full flex items-center justify-between py-[10px]">
