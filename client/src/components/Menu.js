@@ -3,12 +3,14 @@ import { useDispatch } from "react-redux";
 import { reduxLogout } from "../redux/currentUserSlice";
 import { toast } from "react-toastify";
 import axios from "../axios";
+import { reduxRemoveActiveConversation } from "../redux/chatSlice";
 const Menu = () => {
   const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
       await axios.get("/auth/logout");
       dispatch(reduxLogout());
+      dispatch(reduxRemoveActiveConversation());
       window.localStorage.removeItem("registeredUser");
     } catch (error) {
       toast.error(error.response.data.message);

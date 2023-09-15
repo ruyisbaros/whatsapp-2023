@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { dateHandler } from "../utils/momentHandler";
 import axios from "../axios";
 import { toast } from "react-toastify";
@@ -7,10 +7,28 @@ import { reduxSetActiveConversation } from "../redux/chatSlice";
 
 const SingleConversation = ({ convo }) => {
   const dispatch = useDispatch();
+  const { loggedUser } = useSelector((store) => store.currentUser);
+  //const { activeConversation } = useSelector((store) => store.messages);
+
+  const [ME, setME] = useState("");
+  const [YOU, setYOU] = useState("");
+
+  const findMeAndYou = useCallback(() => {
+    const me = convo.users.find((usr) => usr._id === loggedUser.id);
+    setME(me);
+    const you = convo.users.find((usr) => usr._id !== loggedUser.id);
+    setYOU(you);
+  }, [loggedUser, convo]);
+
+  useEffect(() => {
+    findMeAndYou();
+  }, [findMeAndYou]);
+  //console.log(ME, YOU);
+
   const open_create_conversation = async () => {
     try {
       const { data } = await axios.post("conversation/open_create", {
-        receiver_id: convo?.users[1],
+        receiver_id: YOU._id,
       });
       console.log(data);
       dispatch(reduxSetActiveConversation(data));
@@ -28,14 +46,14 @@ const SingleConversation = ({ convo }) => {
         <div className="flex items-center gap-x-3">
           <div className="relative min-w-[50px] max-w-[50px] h-[50px] rounded-full overflow-hidden">
             <img
-              src={convo.picture}
+              src={YOU.picture}
               alt=""
               className="w-full h-full object-cover"
             />
           </div>
           <div className="w-full flex flex-col">
             <h1 className="font-bold capitalize flex items-center gap-x-2">
-              {convo.name}
+              {YOU.name}
             </h1>
             <div>
               <div className="flex items-center gap-x-1 dark:text-dark_text_2">

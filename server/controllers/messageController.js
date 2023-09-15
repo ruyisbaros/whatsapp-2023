@@ -10,6 +10,11 @@ const messageCtrl = {
       if (!convo_id || (!message && files.length <= 0)) {
         return res.status(500).json({ message: `Something went wrong!` });
       }
+      //We will check if it is a first time chat
+      let conversations = null;
+      const messages = await MessageModel.find({
+        conversation: convo_id,
+      });
       //1-Create message document in DB
       const createdMessage = await MessageModel.create({
         message,
@@ -21,7 +26,25 @@ const messageCtrl = {
       await ConversationModel.findByIdAndUpdate(convo_id, {
         latestMessage: createdMessage,
       });
-      //3-Populate newly created message before send
+      //3. IMPORTANT. if below returns 0 means first time chat started. So
+      //we will send conversations only for newly started chats between 2 users. Not always
+      if (messages.length === 0) {
+        conversations = await ConversationModel.find({
+          users: { $elemMatch: { $eq: req.user._id } },
+        })
+          .populate("users", "-password")
+          .populate("admin", "-password")
+          .populate({
+            path: "latestMessage",
+            model: "Message",
+            populate: {
+              path: "sender",
+              model: "User",
+            },
+          })
+          .sort({ updatedAt: -1 });
+      }
+      //4 -Populate newly created message before send
       const populatedMessage = await MessageModel.findById(createdMessage._id)
         .populate("sender", "-password")
         .populate({
@@ -31,7 +54,7 @@ const messageCtrl = {
             select: "-password",
           },
         });
-      res.status(201).json(populatedMessage);
+      res.status(201).json({ populatedMessage, conversations });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

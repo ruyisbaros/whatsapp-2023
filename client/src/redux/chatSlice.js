@@ -15,6 +15,18 @@ const chatSlicer = createSlice({
     reduxSetActiveConversation: (state, action) => {
       state.activeConversation = action.payload;
     },
+    reduxRemoveActiveConversation: (state, action) => {
+      state.activeConversation = null;
+    },
+    reduxUpdateActiveConversation: (state, action) => {
+      state.activeConversation = {
+        ...state.activeConversation,
+        latestMessage: {
+          ...state.activeConversation.latestMessage,
+          message: action.payload,
+        },
+      };
+    },
     reduxGetMyConversations: (state, action) => {
       state.conversations = action.payload;
     },
@@ -44,6 +56,8 @@ export const {
   reduxGetMyMessages,
   reduxAddMyMessages,
   reduxRemoveFromMyMessages,
+  reduxRemoveActiveConversation,
+  reduxUpdateActiveConversation,
 } = chatSlicer.actions;
 
 export default chatSlicer.reducer;

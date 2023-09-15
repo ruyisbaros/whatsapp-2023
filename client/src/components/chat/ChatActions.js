@@ -3,7 +3,10 @@ import { AttachmentIcon, EmojiIcon, SendIcon } from "../../assets/svg";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios";
-import { reduxAddMyMessages } from "../../redux/chatSlice";
+import {
+  reduxAddMyMessages,
+  reduxGetMyConversations,
+} from "../../redux/chatSlice";
 //import ChatInput from "./ChatInput";
 
 const ChatActions = () => {
@@ -19,7 +22,15 @@ const ChatActions = () => {
         convo_id: activeConversation._id,
       });
       console.log(data);
-      dispatch(reduxAddMyMessages(data));
+      dispatch(reduxAddMyMessages(data.populatedMessage));
+      if (data.conversations) {
+        dispatch(
+          reduxGetMyConversations(
+            data.conversations.filter((dt) => dt.latestMessage)
+          )
+        );
+      }
+      //dispatch(reduxUpdateActiveConversation(message));
       setMessage("");
     } catch (error) {
       toast.error(error.response.data.message);
