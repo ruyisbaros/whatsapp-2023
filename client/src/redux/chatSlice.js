@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 //const user = window.localStorage.getItem("registeredUser");
 const initialState = {
   conversations: [],
+  messages: [],
   activeConversation: null,
   notifications: [],
   userStatuses: [],
@@ -23,6 +24,15 @@ const chatSlicer = createSlice({
     reduxRemoveFromMyConversations: (state, action) => {
       state.conversations.pop(action.payload);
     },
+    reduxGetMyMessages: (state, action) => {
+      state.messages = action.payload;
+    },
+    reduxAddMyMessages: (state, action) => {
+      state.messages.push(action.payload);
+    },
+    reduxRemoveFromMyMessages: (state, action) => {
+      state.messages.pop(action.payload);
+    },
   },
 });
 
@@ -31,6 +41,9 @@ export const {
   reduxGetMyConversations,
   reduxAddMyConversations,
   reduxRemoveFromMyConversations,
+  reduxGetMyMessages,
+  reduxAddMyMessages,
+  reduxRemoveFromMyMessages,
 } = chatSlicer.actions;
 
 export default chatSlicer.reducer;

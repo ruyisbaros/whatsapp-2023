@@ -8,7 +8,7 @@ const Contacts = ({ contact }) => {
   const dispatch = useDispatch();
   const open_create_conversation = async () => {
     try {
-      const { data } = await axios.post("conversation/open_create", {
+      const { data } = await axios.post("/conversation/open_create", {
         receiver_id: contact._id,
       });
       console.log(data);

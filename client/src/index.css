@@ -29,6 +29,12 @@
     height: calc(100vh - 220px);
     /* background: #ddd; */
     overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .overflow-scrollbar {
+    height: calc(100vh - 155px);
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 * {
