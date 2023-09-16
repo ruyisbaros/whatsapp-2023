@@ -11,7 +11,7 @@ import RegisteredRoutes from "./ristrict_routes/RegisteredRoutes";
 
 const App = () => {
   return (
-    <div className="dark">
+    <div className="dark ">
       <ToastContainer position="bottom-center" limit={1} />
       <Routes>
         <Route element={<LoggedInRoutes />}>

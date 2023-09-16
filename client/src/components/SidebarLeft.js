@@ -11,7 +11,7 @@ const SidebarLeft = () => {
 
   //console.log(searchResults);
   return (
-    <div className="w-[40%] h-full min-h-screen select-none">
+    <div className="flex0030 w-[30%] h-full overflow-hidden  select-none borderC">
       <SideBarHeader />
       <Notifications />
       <SearchBar

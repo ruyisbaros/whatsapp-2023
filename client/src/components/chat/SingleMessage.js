@@ -5,7 +5,7 @@ import { TriangleIcon } from "../../assets/svg";
 const SingleMessage = ({ msg, me }) => {
   return (
     <div
-      className={`w-full flex mt-2 space-x-3 max-w-xs ${
+      className={`w-full flex mt-2 mb-2 space-x-3 max-w-lg ${
         me ? "ml-auto justify-end" : ""
       }`}
     >

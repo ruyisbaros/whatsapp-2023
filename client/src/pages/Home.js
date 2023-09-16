@@ -32,8 +32,9 @@ const Home = () => {
   }, [fetchMyConversations]);
 
   return (
-    <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center py-[19px]">
-      <div className="container h-screen flex py-[19px]">
+    <div className="relative h-screen dark:bg-dark_bg_1 overflow-hidden borderC">
+      <div className="headBanner"></div>
+      <div className="container h-[95%] pt-[19px] flex dark:bg-dark_bg_1">
         <SidebarLeft />
         {activeConversation ? <ActiveChat /> : <WhatsappHome />}
       </div>

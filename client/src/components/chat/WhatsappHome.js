@@ -3,7 +3,7 @@ import logo from "../../assets/whatsapp.png";
 
 const WhatsappHome = () => {
   return (
-    <div className="h-full w-full dark:bg-dark_bg_3 border-l dark:border-l-dark_border_2 border-b-[6px] border-b-green_2">
+    <div className="h-full w-full dark:bg-dark_bg_3  border-b-[6px] border-b-green_2">
       <div className="-mt-1.5 w-full h-full flex flex-col gap-y-8 items-center justify-center">
         <img src={logo} alt="" />
         <div className="mt-1 text-center space-y[12px]">

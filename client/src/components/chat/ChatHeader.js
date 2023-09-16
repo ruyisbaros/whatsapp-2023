@@ -24,7 +24,7 @@ const ChatHeader = () => {
     findMeAndYou();
   }, [findMeAndYou]);
   return (
-    <div className="h-[59px] dark:bg-dark_bg_2 p16">
+    <div className="h-[59px] dark:bg-dark_bg_2 p16 py-3">
       <div className="w-full h-full flex justify-between items-center">
         {/* Left site foto */}
         <div className="flex items-center gap-x-4">

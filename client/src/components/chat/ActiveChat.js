@@ -30,8 +30,9 @@ const ActiveChat = () => {
   useEffect(() => {
     fetchRelevantMessages();
   }, [fetchRelevantMessages]);
+
   return (
-    <div className="relative w-full h-full border-l dark:border-l-dark_border_2 overflow-hidden">
+    <div className="relative w-full h-full  ">
       <ChatHeader />
       <ChatMessages />
       <ChatActions />

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   AttachmentIcon,
   CloseIcon,
@@ -35,7 +35,7 @@ const ChatActions = () => {
           message,
           convo_id: activeConversation._id,
         });
-        console.log(data);
+        //console.log(data);
         if (data.conversations) {
           dispatch(
             reduxGetMyConversations(
@@ -64,7 +64,7 @@ const ChatActions = () => {
   return (
     <form
       className="dark:bg-dark_bg_2 h-[60px] w-full flex items-center absolute bottom-0
-  py-2 px-4 "
+  py-2 px-4 formBorder"
       onSubmit={handleSendMessage}
     >
       <div className="w-full flex items-center gap-x-2 ">

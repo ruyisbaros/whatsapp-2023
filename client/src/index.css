@@ -2,9 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
 @layer components {
   .container {
-    @apply w-[1700px] h-full;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 38px);
+    max-width: 1600px;
+    z-index: 999;
+    border: 0.5px solid #222d34;
+  }
+  .borderC {
+    border-right: 1px solid #222d34;
+  }
+  .headBanner {
+    width: 100%;
+    height: 200px;
+    background: #00a884;
+  }
+  /* .formBorder {
+    border-top: 5px solid #00a884;
+  } */
+  .flex0030 {
+    flex: 0 0 30%;
   }
   .btn {
     @apply w-[40px] h-[40px] rounded-full flex items-center justify-center active:bg-dark_hover_1;
@@ -37,12 +65,7 @@
     overflow-x: hidden;
   }
 }
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
-}
+
 /* rotateAnimation */
 
 /* Animations */
