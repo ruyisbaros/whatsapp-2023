@@ -80,3 +80,148 @@
   box-shadow: 0 5px 5px 5px#222;
   border-radius: 5px;
 }
+/*---Emoji picker*/
+.epr-dark-theme {
+  background: #202c33 !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+.epr-dark-theme {
+  width: 100% !important;
+}
+
+.openEmojiAnimation {
+  animation: openAn 0.1s forwards;
+}
+@keyframes openAn {
+  0% {
+    transform: translateY(60px);
+  }
+}
+.epr-search-container input {
+  background: #222e35 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  font-size: 13px;
+}
+.epr-preview {
+  display: none !important;
+}
+.epr-emoji-category-label {
+  background: transparent !important;
+  font-size: 15px;
+  font-weight: normal !important;
+}
+/*--- Emoji Scroollbar
+  /* width */
+.epr-body::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+/* Track */
+.epr-body::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+/* Handle */
+.epr-body::-webkit-scrollbar-thumb {
+  background: #444e54 !important;
+}
+.epr-category-nav {
+  padding: 10px 0 !important;
+}
+.epr-category-nav .epr-active::after {
+  content: "";
+  width: 140px;
+  height: 4px;
+  background: #00a884;
+  position: absolute;
+  bottom: -10px;
+  left: -55px;
+}
+.epr-header {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.openToolsAnimation {
+  animation: openTools 0.2s forwards;
+}
+@keyframes openTools {
+  0% {
+    transform: translateY(100%);
+  }
+}
+/* React select */
+.css-obio5r-control:hover {
+  border-color: transparent !important;
+}
+.css-obio5r-control {
+  box-shadow: none !important;
+}
+
+.css-1hb7zxy-IndicatorsContainer {
+  display: none !important;
+}
+.css-1p3m7a8-multiValue {
+  background: transparent !important;
+  color: #fff !important;
+  border: 1px solid #025144;
+  border-radius: 5px !important;
+}
+.css-1p3m7a8-multiValue span {
+  color: #fff !important;
+}
+.css-1p3m7a8-multiValue span:hover {
+  background: transparent !important;
+}
+.css-tj5bde-Svg {
+  background: red;
+  border-radius: 50%;
+}
+.css-12a83d4-MultiValueRemove:hover {
+  background: transparent !important;
+}
+.css-12a83d4-MultiValueRemove:hover svg {
+  fill: #fff !important;
+}
+.css-qbdosj-Input input {
+  color: #fff !important;
+}
+.css-1nmdiq5-menu {
+  background: transparent !important;
+  color: #fff !important;
+  border: 1px solid #025144;
+  border-radius: 5px !important;
+}
+.css-1n6sfyn-MenuList {
+  background: transparent !important;
+}
+
+/*--- MenuList Scroollbar
+  /* width */
+.css-1n6sfyn-MenuList::-webkit-scrollbar {
+  width: 6px !important;
+}
+/* Track */
+.css-1n6sfyn-MenuList::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+/* Handle */
+.css-1n6sfyn-MenuList::-webkit-scrollbar-thumb {
+  background: #444e54 !important;
+}
+.css-10wo9uf-option span {
+  color: #fff !important;
+}
+
+.createGroupAnimation {
+  animation: cga 0.5s;
+}
+@keyframes cga {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}

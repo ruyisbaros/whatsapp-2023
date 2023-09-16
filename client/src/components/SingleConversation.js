@@ -27,7 +27,7 @@ const SingleConversation = ({ convo }) => {
 
   const open_create_conversation = async () => {
     try {
-      const { data } = await axios.post("conversation/open_create", {
+      const { data } = await axios.post("/conversation/open_create", {
         receiver_id: YOU._id,
       });
       console.log(data);
@@ -39,7 +39,7 @@ const SingleConversation = ({ convo }) => {
   return (
     <li
       className={`list-none h-[72px] w-full dark:bg-dark_bg_1 hover:dark:bg-dark_bg_2 cursor-pointer dark:text-dark_text_1 px-[10px] rounded-lg ${
-        activeConversation._id === convo._id ? "dark:bg-dark_bg_2" : ""
+        activeConversation?._id === convo._id ? "dark:bg-dark_bg_2" : ""
       }`}
       onClick={open_create_conversation}
     >
