@@ -14,6 +14,7 @@ import {
   reduxGetMyConversations,
 } from "../../redux/chatSlice";
 import EmojiPicker from "emoji-picker-react";
+import AttachmentMenu from "./AttachmentMenu";
 
 const ChatActions = () => {
   const dispatch = useDispatch();
@@ -23,30 +24,33 @@ const ChatActions = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
+  const [showAttachment, setShowAttachment] = useState(false);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    try {
-      setStatus(true);
-      const { data } = await axios.post("/message/send", {
-        message,
-        convo_id: activeConversation._id,
-      });
-      console.log(data);
-      if (data.conversations) {
-        dispatch(
-          reduxGetMyConversations(
-            data.conversations.filter((dt) => dt.latestMessage)
-          )
-        );
-      }
-      dispatch(reduxAddMyMessages(data.populatedMessage));
+    if (message) {
+      try {
+        setStatus(true);
+        const { data } = await axios.post("/message/send", {
+          message,
+          convo_id: activeConversation._id,
+        });
+        console.log(data);
+        if (data.conversations) {
+          dispatch(
+            reduxGetMyConversations(
+              data.conversations.filter((dt) => dt.latestMessage)
+            )
+          );
+        }
+        dispatch(reduxAddMyMessages(data.populatedMessage));
 
-      setMessage("");
-      setStatus(false);
-    } catch (error) {
-      setStatus(false);
-      toast.error(error.response.data.message);
+        setMessage("");
+        setStatus(false);
+      } catch (error) {
+        setStatus(false);
+        toast.error(error.response.data.message);
+      }
     }
   };
   const handleEmoji = (data) => {
@@ -54,18 +58,9 @@ const ChatActions = () => {
     const { emoji } = data;
     const ref = messageRef.current;
     ref.focus();
-    /* const ref = messageRef.current;
-    console.log(ref.selectionStart);
-    ref.focus();
-    const start = message.slice(0, ref.selectionStart);
-    console.log(start);
-    const end = message.slice(ref.selectionStart);
-    console.log(end);
-    const newText = start + emoji + end;
-    console.log(newText); */
     setMessage((prev) => prev + emoji);
   };
-  console.log(message);
+
   return (
     <form
       className="dark:bg-dark_bg_2 h-[60px] w-full flex items-center absolute bottom-0
@@ -79,10 +74,13 @@ const ChatActions = () => {
             <button
               className="btn"
               type="button"
-              onClick={() => setShowEmoji((prev) => !prev)}
+              onClick={() => {
+                setShowEmoji((prev) => !prev);
+                setShowAttachment(false);
+              }}
             >
               {showEmoji ? (
-                <CloseIcon className="dark:fill-dark_svg_1" />
+                <CloseIcon className="turnIcon dark:fill-dark_svg_1" />
               ) : (
                 <EmojiIcon className="dark:fill-dark_svg_1" />
               )}
@@ -94,9 +92,21 @@ const ChatActions = () => {
             )}
           </li>
           <li className="list-none relative">
-            <button className="btn" type="button">
-              <AttachmentIcon className="dark:fill-dark_svg_1" />
+            <button
+              className="btn"
+              type="button"
+              onClick={() => {
+                setShowAttachment((prev) => !prev);
+                setShowEmoji(false);
+              }}
+            >
+              {showAttachment ? (
+                <CloseIcon className="turnIcon dark:fill-dark_svg_1" />
+              ) : (
+                <AttachmentIcon className="dark:fill-dark_svg_1" />
+              )}
             </button>
+            {showAttachment && <AttachmentMenu />}
           </li>
         </ul>
         {/* message input */}

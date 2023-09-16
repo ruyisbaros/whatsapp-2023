@@ -41,6 +41,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 /* rotateAnimation */
 
@@ -79,6 +80,17 @@
   z-index: 88;
   box-shadow: 0 5px 5px 5px#222;
   border-radius: 5px;
+}
+.turnIcon {
+  animation: turnerA 0.3s forwards;
+}
+@keyframes turnerA {
+  0% {
+    transform: rotate(-60deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
 }
 /*---Emoji picker*/
 .epr-dark-theme {

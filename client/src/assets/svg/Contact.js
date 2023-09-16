@@ -2,8 +2,8 @@ export default function ContactIcon() {
   return (
     <svg
       viewBox="0 0 53 53"
-      height="53"
-      width="53"
+      height="35"
+      width="35"
       preserveAspectRatio="xMidYMid meet"
       class=""
       version="1.1"

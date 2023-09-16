@@ -2,10 +2,10 @@ export default function PollIcon() {
   return (
     <svg
       viewBox="0 0 53 53"
-      height="53"
-      width="53"
+      height="35"
+      width="35"
       preserveAspectRatio="xMidYMid meet"
-      class=""
+      className=""
       fill="none"
     >
       <circle cx="26.5" cy="26.5" r="26.5" fill="#02A698"></circle>
