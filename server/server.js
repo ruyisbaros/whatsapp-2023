@@ -10,7 +10,21 @@ const mongoose = require("mongoose");
 const mongoSanitize = require("express-mongo-sanitize");
 const compression = require("compression");
 const fileUpload = require("express-fileupload");
+const { Server } = require("socket.io");
+
 const app = express();
+//Sockets
+/* https://ineedsomething.herokuapp.com/ */
+const http = require("http").createServer(app);
+const io = new Server(http, {
+  pingTimeout: 6000,
+  cors: {
+    origin: `${process.env.FRONT_URL}`,
+    credentials: true,
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+  },
+  pingInterval: 3000,
+});
 
 //file base middleware
 if (process.env.NODE_ENV === "development") {
@@ -78,8 +92,13 @@ app.use("/api/v1/auth", routes.authRoutes);
 app.use("/api/v1/conversation", routes.conversationRoutes);
 app.use("/api/v1/message", routes.messageRoutes);
 
+//Socket functions
+io.on("connection", (socket) => {
+  console.log(`User with ${socket.id} connected`);
+});
+
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => {
+http.listen(port, () => {
   console.log(`Server runs at port: ${port}...`);
 });
