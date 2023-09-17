@@ -34,7 +34,7 @@ const LoginForm = () => {
           "registeredUser",
           JSON.stringify(data.user)
         );
-        dispatch(reduxRegisterUser(data.user));
+        await dispatch(reduxRegisterUser(data.user));
         toast.success(data.message);
       } else {
         toast.error("Something went wrong! Please try again.");

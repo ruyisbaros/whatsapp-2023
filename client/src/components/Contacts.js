@@ -3,6 +3,7 @@ import axios from "../axios";
 import { useDispatch } from "react-redux";
 import { reduxSetActiveConversation } from "../redux/chatSlice";
 import { toast } from "react-toastify";
+import { joinAConversation } from "../SocketIOConnection";
 
 const Contacts = ({ contact }) => {
   const dispatch = useDispatch();
@@ -13,6 +14,8 @@ const Contacts = ({ contact }) => {
       });
       console.log(data);
       dispatch(reduxSetActiveConversation(data));
+      //socket
+      joinAConversation(data._id);
     } catch (error) {
       toast.error(error.response.data.message);
     }

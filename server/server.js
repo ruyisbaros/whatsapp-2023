@@ -11,7 +11,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const compression = require("compression");
 const fileUpload = require("express-fileupload");
 const { Server } = require("socket.io");
-
+const { socketServer } = require("./SocketServer");
 const app = express();
 //Sockets
 /* https://ineedsomething.herokuapp.com/ */
@@ -94,7 +94,7 @@ app.use("/api/v1/message", routes.messageRoutes);
 
 //Socket functions
 io.on("connection", (socket) => {
-  console.log(`User with ${socket.id} connected`);
+  socketServer(socket);
 });
 
 const port = process.env.PORT || 5000;

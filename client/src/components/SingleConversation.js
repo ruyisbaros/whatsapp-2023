@@ -4,6 +4,7 @@ import axios from "../axios";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { reduxSetActiveConversation } from "../redux/chatSlice";
+import { joinAConversation } from "../SocketIOConnection";
 
 const SingleConversation = ({ convo }) => {
   const dispatch = useDispatch();
@@ -31,7 +32,9 @@ const SingleConversation = ({ convo }) => {
         receiver_id: YOU._id,
       });
       console.log(data);
-      dispatch(reduxSetActiveConversation(data));
+      await dispatch(reduxSetActiveConversation(data));
+      //socket
+      joinAConversation(data._id);
     } catch (error) {
       toast.error(error.response.data.message);
     }

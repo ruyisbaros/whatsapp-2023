@@ -17,7 +17,7 @@ if (APP_ENVIRONMENT === "local") {
 
 const BASE_URL = `${BASE_ENDPOINT}/api/v1`;
 //console.log(BASE_ENDPOINT)
-
+export const BACKEND_URL = "http://localhost:5000";
 export default axios.create({
   baseURL: BASE_URL,
   headers: { "Content-Type": "application/json", Accept: "application/json" },
