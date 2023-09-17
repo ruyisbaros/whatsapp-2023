@@ -4,12 +4,16 @@ import ChatMessages from "./ChatMessages";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios";
-import { reduxGetMyMessages } from "../../redux/chatSlice";
+import {
+  reduxGetMyMessages,
+  reduxMakeMessagesSeen,
+} from "../../redux/chatSlice";
 import ChatActions from "./ChatActions";
 
 const ActiveChat = () => {
   const dispatch = useDispatch();
   const { activeConversation } = useSelector((store) => store.messages);
+  const { loggedUser } = useSelector((store) => store.currentUser);
 
   const fetchRelevantMessages = useCallback(async () => {
     if (activeConversation.latestMessage) {
@@ -30,6 +34,29 @@ const ActiveChat = () => {
   useEffect(() => {
     fetchRelevantMessages();
   }, [fetchRelevantMessages]);
+
+  const makeMessagesSeen = useCallback(async () => {
+    if (activeConversation.latestMessage) {
+      try {
+        const { data } = await axios.get(
+          `/message/make_seen/${activeConversation.latestMessage.conversation}`
+        );
+        //console.log(data);
+        dispatch(
+          reduxMakeMessagesSeen({
+            logId: loggedUser.id,
+            convoId: activeConversation.latestMessage.conversation,
+          })
+        );
+      } catch (error) {
+        toast.error(error.response.data.message);
+      }
+    }
+  }, [activeConversation, dispatch, loggedUser]);
+
+  useEffect(() => {
+    makeMessagesSeen();
+  }, [makeMessagesSeen]);
 
   return (
     <div className="relative w-full h-full  ">

@@ -12,7 +12,7 @@ exports.socketServer = (socket) => {
       users.push({ id, socketId: socket.id });
       socket.emit("onlineUsers", users);
     }
-    console.log(users);
+    //console.log(users);
   });
 
   socket.on("disconnect", () => {
@@ -32,8 +32,6 @@ exports.socketServer = (socket) => {
   //Send receive messages
   socket.on("new message", ({ msg, id }) => {
     const user = users.find((user) => user.id === id);
-    //console.log("message:", msg);
-    //console.log("Id: ", id);
     console.log("Users: ", users);
     console.log("User: ", user);
 

@@ -12,6 +12,7 @@ import { ClipLoader } from "react-spinners";
 import {
   reduxAddMyMessages,
   reduxGetMyConversations,
+  reduxSetChattedUser,
 } from "../../redux/chatSlice";
 import EmojiPicker from "emoji-picker-react";
 import AttachmentMenu from "./AttachmentMenu";
@@ -24,19 +25,21 @@ const ChatActions = () => {
   const dispatch = useDispatch();
   const messageRef = useRef(null);
 
-  const { activeConversation } = useSelector((store) => store.messages);
+  const { activeConversation, chattedUser } = useSelector(
+    (store) => store.messages
+  );
   const { loggedUser } = useSelector((store) => store.currentUser);
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
   const [showAttachment, setShowAttachment] = useState(false);
-  const [chattedUser, setChattedUser] = useState(null);
 
   useEffect(() => {
-    setChattedUser(
-      activeConversation.users.find((usr) => usr._id !== loggedUser.id)
+    const usr = activeConversation.users.find(
+      (usr) => usr._id !== loggedUser.id
     );
-  }, [activeConversation, loggedUser]);
+    dispatch(reduxSetChattedUser(usr));
+  }, [activeConversation, loggedUser, dispatch]);
   //console.log(chattedUser);
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -46,6 +49,7 @@ const ChatActions = () => {
         const { data } = await axios.post("/message/send", {
           message,
           convo_id: activeConversation._id,
+          recipient: chattedUser._id,
         });
         console.log(data);
         if (data.conversations) {
@@ -54,7 +58,7 @@ const ChatActions = () => {
               data.conversations.filter((dt) => dt.latestMessage)
             )
           );
-          //socket
+          //socket create conversation for fresh chatters
           const convo = data.conversations.find(
             (cnv) => cnv._id === activeConversation._id
           );
@@ -62,7 +66,7 @@ const ChatActions = () => {
         }
         dispatch(reduxAddMyMessages(data.populatedMessage));
 
-        //Socket
+        //Socket send message
         sendNewMessage(data.populatedMessage, chattedUser._id);
 
         setMessage("");

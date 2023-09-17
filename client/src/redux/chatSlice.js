@@ -6,6 +6,7 @@ const initialState = {
   activeConversation: null,
   notifications: [],
   userStatuses: [],
+  chattedUser: null,
 };
 
 const chatSlicer = createSlice({
@@ -18,14 +19,8 @@ const chatSlicer = createSlice({
     reduxRemoveActiveConversation: (state, action) => {
       state.activeConversation = null;
     },
-    reduxUpdateActiveConversation: (state, action) => {
-      state.activeConversation = {
-        ...state.activeConversation,
-        latestMessage: {
-          ...state.activeConversation.latestMessage,
-          message: action.payload,
-        },
-      };
+    reduxSetChattedUser: (state, action) => {
+      state.chattedUser = action.payload;
     },
     reduxGetMyConversations: (state, action) => {
       state.conversations = action.payload;
@@ -54,8 +49,31 @@ const chatSlicer = createSlice({
           : c
       );
     },
+    reduxAddMyMessagesFromSocket: (state, action) => {
+      if (action.payload.conversation._id === state.activeConversation._id) {
+        state.messages.push({ ...action.payload, seen: true });
+      } else {
+        state.messages.push(action.payload);
+      }
+      //Update latest message
+      state.conversations = state.conversations.map((c) =>
+        c._id === action.payload.conversation._id
+          ? { ...c, latestMessage: action.payload.conversation.latestMessage }
+          : c
+      );
+    },
     reduxRemoveFromMyMessages: (state, action) => {
       state.messages.pop(action.payload);
+    },
+    reduxMakeMessagesSeen: (state, action) => {
+      const { logId, convoId } = action.payload;
+      state.messages = state.messages.map((msg) =>
+        msg.sender._id !== logId &&
+        !msg.seen &&
+        msg.conversation._id === convoId
+          ? { ...msg, seen: true }
+          : msg
+      );
     },
   },
 });
@@ -68,8 +86,10 @@ export const {
   reduxGetMyMessages,
   reduxAddMyMessages,
   reduxRemoveFromMyMessages,
+  reduxMakeMessagesSeen,
+  reduxAddMyMessagesFromSocket,
+  reduxSetChattedUser,
   reduxRemoveActiveConversation,
-  reduxUpdateActiveConversation,
 } = chatSlicer.actions;
 
 export default chatSlicer.reducer;

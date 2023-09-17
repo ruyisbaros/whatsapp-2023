@@ -9,10 +9,13 @@ import { joinAConversation } from "../SocketIOConnection";
 const SingleConversation = ({ convo }) => {
   const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
-  const { activeConversation } = useSelector((store) => store.messages);
+  const { activeConversation, messages } = useSelector(
+    (store) => store.messages
+  );
 
   const [ME, setME] = useState("");
   const [YOU, setYOU] = useState("");
+  const [countOfNotReadMessage, setCountOfNotReadMessage] = useState(0);
 
   const findMeAndYou = useCallback(() => {
     const me = convo.users.find((usr) => usr._id === loggedUser.id);
@@ -39,6 +42,22 @@ const SingleConversation = ({ convo }) => {
       toast.error(error.response.data.message);
     }
   };
+  const countMyNotSeenMessages = useCallback(() => {
+    setCountOfNotReadMessage(
+      messages.reduce((ac, item) => {
+        if (item.sender._id !== loggedUser.id && !item.seen) {
+          return (ac += 1);
+        } else {
+          return 0;
+        }
+      }, 0)
+    );
+  }, [messages, loggedUser]);
+
+  useEffect(() => {
+    countMyNotSeenMessages();
+  }, [countMyNotSeenMessages]);
+  console.log(countOfNotReadMessage);
   return (
     <li
       className={`list-none h-[72px] w-full dark:bg-dark_bg_1 hover:dark:bg-dark_bg_2 cursor-pointer dark:text-dark_text_1 px-[10px] rounded-lg ${

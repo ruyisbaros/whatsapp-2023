@@ -1,7 +1,10 @@
 import { io } from "socket.io-client";
 import { store } from "./redux/store";
 import { BACKEND_URL } from "./axios";
-import { reduxAddMyConversations, reduxAddMyMessages } from "./redux/chatSlice";
+import {
+  reduxAddMyConversations,
+  reduxAddMyMessagesFromSocket,
+} from "./redux/chatSlice";
 let socket;
 
 export const connectToSocketServer = () => {
@@ -11,7 +14,7 @@ export const connectToSocketServer = () => {
     console.log("Connected to socket io server");
   });
   socket.on("new message", (msg) => {
-    store.dispatch(reduxAddMyMessages(msg));
+    store.dispatch(reduxAddMyMessagesFromSocket(msg));
   });
   socket.on("update conversationList", (convo) => {
     store.dispatch(reduxAddMyConversations(convo));

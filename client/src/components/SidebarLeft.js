@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import SideBarHeader from "./SideBarHeader";
 import Notifications from "./Notifications";
 import SearchBar from "./SearchBar";
@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 
 const SidebarLeft = () => {
   const [searchResults, setSearchResults] = useState([]);
-
   //console.log(searchResults);
   return (
     <div className="flex0030 w-[30%] h-full overflow-hidden  select-none borderC">
