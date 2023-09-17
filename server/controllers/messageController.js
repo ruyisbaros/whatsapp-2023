@@ -27,7 +27,7 @@ const messageCtrl = {
         latestMessage: createdMessage,
       });
       //3. IMPORTANT. if below returns 0 means first time chat started. So
-      //we will send conversations only for newly started chats between 2 users. Not always
+      //we will send conversations only for newly started chats between 2 users. Not always!
       if (messages.length === 0) {
         conversations = await ConversationModel.find({
           users: { $elemMatch: { $eq: req.user._id } },
@@ -49,12 +49,15 @@ const messageCtrl = {
         .populate("sender", "-password")
         .populate({
           path: "conversation",
+          model: "Conversation",
           populate: {
-            path: "users",
+            path: "conversation.users",
+            model: "User",
             select: "-password",
           },
           populate: {
             path: "latestMessage",
+            model: "Message",
           },
         });
       res.status(201).json({ populatedMessage, conversations });

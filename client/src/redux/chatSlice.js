@@ -31,7 +31,13 @@ const chatSlicer = createSlice({
       state.conversations = action.payload;
     },
     reduxAddMyConversations: (state, action) => {
-      state.conversations.push(action.payload);
+      console.log(action.payload);
+      const newConversation = state.conversations.find(
+        (cnv) => cnv._id === action.payload._id
+      );
+      if (!newConversation) {
+        state.conversations.push(action.payload);
+      }
     },
     reduxRemoveFromMyConversations: (state, action) => {
       state.conversations.pop(action.payload);

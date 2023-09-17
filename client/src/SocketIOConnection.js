@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
 import { store } from "./redux/store";
 import { BACKEND_URL } from "./axios";
+import { reduxAddMyConversations, reduxAddMyMessages } from "./redux/chatSlice";
 let socket;
 
 export const connectToSocketServer = () => {
@@ -9,8 +10,11 @@ export const connectToSocketServer = () => {
   socket.on("connect", () => {
     console.log("Connected to socket io server");
   });
-  socket.on("receiveMessage", (msg) => {
-    console.log(msg);
+  socket.on("new message", (msg) => {
+    store.dispatch(reduxAddMyMessages(msg));
+  });
+  socket.on("update conversationList", (convo) => {
+    store.dispatch(reduxAddMyConversations(convo));
   });
 };
 //Emit user activities
@@ -20,4 +24,12 @@ export const joinUser = (id) => {
 
 export const joinAConversation = (convo) => {
   socket?.emit("Join conversation", convo);
+};
+
+export const sendNewMessage = (msg, id) => {
+  socket?.emit("new message", { msg, id });
+};
+//first time chat means other user's conversation list should include me real time
+export const createNewConversation = (newConversation, id) => {
+  socket?.emit("update conversationList", { newConversation, id });
 };

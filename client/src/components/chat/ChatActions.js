@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   AttachmentIcon,
   CloseIcon,
@@ -15,17 +15,29 @@ import {
 } from "../../redux/chatSlice";
 import EmojiPicker from "emoji-picker-react";
 import AttachmentMenu from "./AttachmentMenu";
+import {
+  createNewConversation,
+  sendNewMessage,
+} from "../../SocketIOConnection";
 
 const ChatActions = () => {
   const dispatch = useDispatch();
   const messageRef = useRef(null);
 
   const { activeConversation } = useSelector((store) => store.messages);
+  const { loggedUser } = useSelector((store) => store.currentUser);
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
   const [showAttachment, setShowAttachment] = useState(false);
+  const [chattedUser, setChattedUser] = useState(null);
 
+  useEffect(() => {
+    setChattedUser(
+      activeConversation.users.find((usr) => usr._id !== loggedUser.id)
+    );
+  }, [activeConversation, loggedUser]);
+  //console.log(chattedUser);
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (message) {
@@ -35,15 +47,23 @@ const ChatActions = () => {
           message,
           convo_id: activeConversation._id,
         });
-        //console.log(data);
+        console.log(data);
         if (data.conversations) {
           dispatch(
             reduxGetMyConversations(
               data.conversations.filter((dt) => dt.latestMessage)
             )
           );
+          //socket
+          const convo = data.conversations.find(
+            (cnv) => cnv._id === activeConversation._id
+          );
+          createNewConversation(convo, chattedUser._id);
         }
         dispatch(reduxAddMyMessages(data.populatedMessage));
+
+        //Socket
+        sendNewMessage(data.populatedMessage, chattedUser._id);
 
         setMessage("");
         setStatus(false);

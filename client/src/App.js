@@ -18,7 +18,9 @@ const App = () => {
     connectToSocketServer();
   }, []);
   useEffect(() => {
-    joinUser(loggedUser.id);
+    if (loggedUser) {
+      joinUser(loggedUser.id);
+    }
   }, [loggedUser]);
   return (
     <div className="dark ">
