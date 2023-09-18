@@ -64,6 +64,7 @@ const ChatActions = () => {
           );
           createNewConversation(convo, chattedUser._id);
         }
+
         dispatch(reduxAddMyMessages(data.populatedMessage));
 
         //Socket send message

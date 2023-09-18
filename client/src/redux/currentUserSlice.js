@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const user = window.localStorage.getItem("registeredUser");
 const initialState = {
   loggedUser: user ? JSON.parse(user) : null,
+  onLineUsers: [],
   status: "",
   error: "",
 };
@@ -19,9 +20,22 @@ const currentUSlicer = createSlice({
       const { id, email, name, picture, status } = action.payload;
       state.loggedUser = { id, name, email, picture, status };
     },
+    reduxSetOnlineUsers: (state, action) => {
+      state.onLineUsers = action.payload;
+    },
+    reduxAUserBecameOffline: (state, action) => {
+      state.onLineUsers = state.onLineUsers.filter(
+        (usr) => usr.id !== action.payload
+      );
+    },
   },
 });
 
-export const { reduxLogout, reduxRegisterUser } = currentUSlicer.actions;
+export const {
+  reduxLogout,
+  reduxRegisterUser,
+  reduxSetOnlineUsers,
+  reduxAUserBecameOffline,
+} = currentUSlicer.actions;
 
 export default currentUSlicer.reducer;

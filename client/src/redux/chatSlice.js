@@ -26,8 +26,8 @@ const chatSlicer = createSlice({
       state.conversations = action.payload;
     },
     reduxAddMyConversations: (state, action) => {
-      console.log(action.payload);
-      const newConversation = state.conversations.find(
+      //console.log(action.payload);
+      const newConversation = state.conversations?.find(
         (cnv) => cnv._id === action.payload._id
       );
       if (!newConversation) {
@@ -50,7 +50,10 @@ const chatSlicer = createSlice({
       );
     },
     reduxAddMyMessagesFromSocket: (state, action) => {
-      if (action.payload.conversation._id === state.activeConversation._id) {
+      if (
+        state.activeConversation &&
+        action.payload?.conversation?._id === state.activeConversation?._id
+      ) {
         state.messages.push({ ...action.payload, seen: true });
       } else {
         state.messages.push(action.payload);

@@ -1,11 +1,7 @@
 let users = [];
 exports.socketServer = (socket) => {
   console.log(`User with ${socket.id} connected`);
-  // new way try
-  /* socket.on("joinUser", (id) => {
-    socket.join(id);
-  }); */
-  //My old way
+  //Join User (Online)
   socket.on("joinUser", (id) => {
     const user = users.find((user) => user.id === id);
     if (!user) {
@@ -32,8 +28,8 @@ exports.socketServer = (socket) => {
   //Send receive messages
   socket.on("new message", ({ msg, id }) => {
     const user = users.find((user) => user.id === id);
-    console.log("Users: ", users);
-    console.log("User: ", user);
+    //console.log("Users: ", users);
+    //console.log("User: ", user);
 
     if (user) {
       socket.to(`${user.socketId}`).emit("new message", msg);

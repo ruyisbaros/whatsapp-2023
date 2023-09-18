@@ -43,14 +43,14 @@ const SingleConversation = ({ convo }) => {
     }
   };
   const countMyNotSeenMessages = useCallback(() => {
-    setCountOfNotReadMessage(
+    setCountOfNotReadMessage((prev) =>
       messages.reduce((ac, item) => {
         if (item.sender._id !== loggedUser.id && !item.seen) {
           return (ac += 1);
         } else {
           return 0;
         }
-      }, 0)
+      }, prev)
     );
   }, [messages, loggedUser]);
 

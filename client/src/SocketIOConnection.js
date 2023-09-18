@@ -5,6 +5,10 @@ import {
   reduxAddMyConversations,
   reduxAddMyMessagesFromSocket,
 } from "./redux/chatSlice";
+import {
+  reduxAUserBecameOffline,
+  reduxSetOnlineUsers,
+} from "./redux/currentUserSlice";
 let socket;
 
 export const connectToSocketServer = () => {
@@ -18,6 +22,12 @@ export const connectToSocketServer = () => {
   });
   socket.on("update conversationList", (convo) => {
     store.dispatch(reduxAddMyConversations(convo));
+  });
+  socket.on("onlineUsers", (users) => {
+    store.dispatch(reduxSetOnlineUsers(users));
+  });
+  socket.on("offlineUsers", (id) => {
+    store.dispatch(reduxAUserBecameOffline(id));
   });
 };
 //Emit user activities
