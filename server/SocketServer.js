@@ -1,3 +1,6 @@
+//const { dateFormatter } = require("./controllers/authController");
+const { format, formatDistance, formatRelative, subDays } = require("date-fns");
+const User = require("./models/userModel");
 let users = [];
 exports.socketServer = (socket) => {
   console.log(`User with ${socket.id} connected`);
@@ -6,17 +9,23 @@ exports.socketServer = (socket) => {
     const user = users.find((user) => user.id === id);
     if (!user) {
       users.push({ id, socketId: socket.id });
-      socket.emit("onlineUsers", users);
+      socket.broadcast.emit("onlineUsers", users);
     }
-    //console.log(users);
+    console.log(users);
   });
 
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
     const user = users.find((u) => u.socketId === socket.id);
     users = users.filter((user) => user.socketId !== socket.id);
     console.log(users);
     console.log(user);
-    socket.emit("offlineUsers", user?.id);
+    const date = new Date();
+    if (user) {
+      await User.findByIdAndUpdate(user.id, {
+        lastSeen: format(date, "EEEE do HH:mm "),
+      });
+    }
+    socket.broadcast.emit("offlineUsers", user?.id);
   });
 
   //Join a conversation room with conversation id

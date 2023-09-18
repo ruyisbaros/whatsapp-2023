@@ -31,6 +31,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: "Hey there! I am using whatsapp",
     },
+    lastSeen: String,
   },
   { timestamps: true, collection: "users" }
 );

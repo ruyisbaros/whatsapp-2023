@@ -4,8 +4,10 @@ import SearchLargeIcon from "./../../assets/svg/SearchLarge";
 import DotsIcon from "../../assets/svg/Dots";
 
 const ChatHeader = () => {
-  const { activeConversation } = useSelector((store) => store.messages);
-  const { loggedUser } = useSelector((store) => store.currentUser);
+  const { activeConversation, chattedUser } = useSelector(
+    (store) => store.messages
+  );
+  const { loggedUser, onLineUsers } = useSelector((store) => store.currentUser);
 
   const [ME, setME] = useState("");
   const [YOU, setYOU] = useState("");
@@ -39,7 +41,11 @@ const ChatHeader = () => {
             <h1 className="dark:text-white capitalize text-sm font-bold">
               {YOU.name}
             </h1>
-            <span className="text-xs dark:text-dark_svg_2">online</span>
+            <span className="text-xs dark:text-dark_svg_2">
+              {onLineUsers.find((usr) => usr.id === chattedUser._id)
+                ? "online"
+                : "Last online " + chattedUser.lastSeen}
+            </span>
           </div>
         </div>
         {/* Right side icons */}

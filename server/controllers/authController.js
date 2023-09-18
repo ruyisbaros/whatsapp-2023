@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
+
 const {
   createJsonToken,
   createReFreshToken,
@@ -144,8 +145,6 @@ const authCtrl = {
 
 module.exports = authCtrl;
 
-/* res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        path: "/api/v1/auth/refresh_token",
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-      }); */
+/* exports.dateFormatter = async (user) => {
+  await User.findOneAndUpdate(user.id, { lastSeen: dateFormat("longTime") });
+}; */
