@@ -42,9 +42,9 @@ const ChatHeader = () => {
               {YOU.name}
             </h1>
             <span className="text-xs dark:text-dark_svg_2">
-              {onLineUsers.find((usr) => usr.id === chattedUser._id)
+              {onLineUsers.find((usr) => usr.id === chattedUser?._id)
                 ? "online"
-                : "Last online " + chattedUser.lastSeen}
+                : "Last online " + chattedUser?.lastSeen}
             </span>
           </div>
         </div>

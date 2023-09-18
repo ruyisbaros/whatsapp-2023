@@ -1,6 +1,7 @@
-//const { dateFormatter } = require("./controllers/authController");
 const { format, formatDistance, formatRelative, subDays } = require("date-fns");
+
 const User = require("./models/userModel");
+const { dateHandler } = require("./utils/momentHandler");
 let users = [];
 exports.socketServer = (socket) => {
   console.log(`User with ${socket.id} connected`);
@@ -20,9 +21,10 @@ exports.socketServer = (socket) => {
     console.log(users);
     console.log(user);
     const date = new Date();
+
     if (user) {
       await User.findByIdAndUpdate(user.id, {
-        lastSeen: format(date, "EEEE do HH:mm "),
+        lastSeen: dateHandler(date),
       });
     }
     socket.broadcast.emit("offlineUsers", user?.id);
