@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import SearchLargeIcon from "./../../assets/svg/SearchLarge";
 import DotsIcon from "../../assets/svg/Dots";
+import { dateHandler2 } from "../../utils/momentHandler";
 
 const ChatHeader = () => {
   const { activeConversation, chattedUser } = useSelector(
@@ -14,11 +15,11 @@ const ChatHeader = () => {
 
   const findMeAndYou = useCallback(() => {
     const me = activeConversation.users.find(
-      (usr) => usr._id === loggedUser.id
+      (usr) => usr._id === loggedUser?.id
     );
     setME(me);
     const you = activeConversation.users.find(
-      (usr) => usr._id !== loggedUser.id
+      (usr) => usr._id !== loggedUser?.id
     );
     setYOU(you);
   }, [loggedUser, activeConversation]);
@@ -44,7 +45,7 @@ const ChatHeader = () => {
             <span className="text-xs dark:text-dark_svg_2">
               {onLineUsers.find((usr) => usr.id === chattedUser?._id)
                 ? "online"
-                : "Last online " + chattedUser?.lastSeen}
+                : "Last online " + dateHandler2(chattedUser?.lastSeen)}
             </span>
           </div>
         </div>

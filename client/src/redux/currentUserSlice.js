@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 //import Cookies from "js-cookie";
 const user = window.localStorage.getItem("registeredUser");
+let onUsers = window.localStorage.getItem("onlineUsers");
 const initialState = {
   loggedUser: user ? JSON.parse(user) : null,
-  onLineUsers: [],
+  onLineUsers: onUsers ? JSON.parse(onUsers) : [],
   status: "",
   error: "",
 };

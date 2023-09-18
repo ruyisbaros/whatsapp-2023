@@ -24,9 +24,14 @@ export const connectToSocketServer = () => {
     store.dispatch(reduxAddMyConversations(convo));
   });
   socket.on("onlineUsers", (users) => {
+    window.localStorage.setItem("onlineUsers", JSON.stringify(users));
     store.dispatch(reduxSetOnlineUsers(users));
   });
   socket.on("offlineUsers", (id) => {
+    let onUsers = window.localStorage.getItem("onlineUsers");
+    onUsers = JSON.parse(onUsers);
+    onUsers = onUsers?.filter((usr) => usr.id !== id);
+    window.localStorage.setItem("onlineUsers", JSON.stringify(onUsers));
     store.dispatch(reduxAUserBecameOffline(id));
   });
 };
@@ -45,4 +50,7 @@ export const sendNewMessage = (msg, id) => {
 //first time chat means other user's conversation list should include me real time
 export const createNewConversation = (newConversation, id) => {
   socket?.emit("update conversationList", { newConversation, id });
+};
+export const logoutDisconnect = (id) => {
+  socket?.emit("logout", id);
 };

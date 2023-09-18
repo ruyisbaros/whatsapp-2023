@@ -18,14 +18,14 @@ const ChatMessages = () => {
           messages
             .filter(
               (msg) =>
-                msg.sender._id === chattedUser._id ||
-                msg.sender._id === loggedUser.id
+                msg.sender._id === chattedUser?._id ||
+                msg.sender._id === loggedUser?.id
             )
             .map((message) => (
               <SingleMessage
                 key={message._id}
                 msg={message}
-                me={loggedUser.id === message.sender._id}
+                me={loggedUser.id === message.sender?._id}
               />
             ))}
         <div ref={endRef} className="h-[30px]"></div>

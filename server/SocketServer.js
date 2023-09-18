@@ -1,4 +1,4 @@
-const { format, formatDistance, formatRelative, subDays } = require("date-fns");
+//const { format, formatDistance, formatRelative, subDays } = require("date-fns");
 
 const User = require("./models/userModel");
 const { dateHandler } = require("./utils/momentHandler");
@@ -21,10 +21,22 @@ exports.socketServer = (socket) => {
     console.log(users);
     console.log(user);
     const date = new Date();
-
     if (user) {
       await User.findByIdAndUpdate(user.id, {
-        lastSeen: dateHandler(date),
+        lastSeen: date,
+      });
+    }
+    socket.broadcast.emit("offlineUsers", user?.id);
+  });
+  socket.on("logout", async (id) => {
+    const user = users.find((u) => u.id === id);
+    users = users.filter((user) => user.socketId !== socket.id);
+    console.log(users);
+    console.log(user);
+    const date = new Date();
+    if (user) {
+      await User.findByIdAndUpdate(user.id, {
+        lastSeen: date,
       });
     }
     socket.broadcast.emit("offlineUsers", user?.id);

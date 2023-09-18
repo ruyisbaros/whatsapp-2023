@@ -41,8 +41,10 @@ exports.verifyAccessToken = async (token) => {
   return new Promise((resolve, reject) => {
     jwt.verify(token, `${process.env.JWT_ACCESS_KEY}`, (error, payload) => {
       if (error) {
+        //console.log(error);
         reject(error);
       } else {
+        //console.log(payload);
         resolve(payload);
       }
     });

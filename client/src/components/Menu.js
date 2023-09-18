@@ -1,19 +1,23 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { reduxLogout } from "../redux/currentUserSlice";
 import { toast } from "react-toastify";
 import axios from "../axios";
 import { reduxRemoveActiveConversation } from "../redux/chatSlice";
+import { logoutDisconnect } from "../SocketIOConnection";
 const Menu = () => {
   const dispatch = useDispatch();
+  const { loggedUser } = useSelector((store) => store.currentUser);
   const handleLogout = async () => {
     try {
       await axios.get("/auth/logout");
       dispatch(reduxLogout());
       dispatch(reduxRemoveActiveConversation());
       window.localStorage.removeItem("registeredUser");
+      //socket
+      logoutDisconnect(loggedUser.id);
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message);
     }
   };
   return (

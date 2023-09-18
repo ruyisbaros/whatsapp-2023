@@ -10,6 +10,8 @@ exports.protect = async (req, res, next) => {
       return res.status(400).json({ message: "You should sign in!" });
     }
     const { id } = await verifyAccessToken(token);
+    /* console.log(exp);
+    console.log("Now: ", Date.now()); */
     if (!id) {
       return res.status(401).json({ message: "Invalid credentials!" });
     }

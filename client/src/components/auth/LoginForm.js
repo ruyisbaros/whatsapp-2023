@@ -42,7 +42,6 @@ const LoginForm = () => {
     } catch (error) {
       setStatus(false);
       toast.error(error.response.data.message);
-      console.log(error.response.data.message);
     }
   };
   return (
