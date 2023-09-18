@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import SingleMessage from "./SingleMessage";
 
 const ChatMessages = () => {
   const endRef = useRef();
-  const { messages, chattedUser } = useSelector((store) => store.messages);
+  const { messages, chattedUser, isTyping, typeTo } = useSelector(
+    (store) => store.messages
+  );
   const { loggedUser } = useSelector((store) => store.currentUser);
-
   useEffect(() => {
     endRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
@@ -28,6 +29,7 @@ const ChatMessages = () => {
                 me={loggedUser.id === message.sender?._id}
               />
             ))}
+        {isTyping && typeTo === chattedUser._id ? "typing..." : ""}
         <div ref={endRef} className="h-[30px]"></div>
       </div>
     </div>

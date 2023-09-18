@@ -57,7 +57,7 @@ const SingleConversation = ({ convo }) => {
   useEffect(() => {
     countMyNotSeenMessages();
   }, [countMyNotSeenMessages]);
-  console.log(countOfNotReadMessage);
+  // console.log(countOfNotReadMessage);
   return (
     <li
       className={`list-none h-[72px] w-full dark:bg-dark_bg_1 hover:dark:bg-dark_bg_2 cursor-pointer dark:text-dark_text_1 px-[10px] rounded-lg ${

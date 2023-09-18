@@ -1,7 +1,5 @@
 //const { format, formatDistance, formatRelative, subDays } = require("date-fns");
-
 const User = require("./models/userModel");
-const { dateHandler } = require("./utils/momentHandler");
 let users = [];
 exports.socketServer = (socket) => {
   console.log(`User with ${socket.id} connected`);
@@ -18,8 +16,8 @@ exports.socketServer = (socket) => {
   socket.on("disconnect", async () => {
     const user = users.find((u) => u.socketId === socket.id);
     users = users.filter((user) => user.socketId !== socket.id);
-    console.log(users);
-    console.log(user);
+    //console.log(users);
+    //console.log(user);
     const date = new Date();
     if (user) {
       await User.findByIdAndUpdate(user.id, {
@@ -31,8 +29,8 @@ exports.socketServer = (socket) => {
   socket.on("logout", async (id) => {
     const user = users.find((u) => u.id === id);
     users = users.filter((user) => user.socketId !== socket.id);
-    console.log(users);
-    console.log(user);
+    //console.log(users);
+    //console.log(user);
     const date = new Date();
     if (user) {
       await User.findByIdAndUpdate(user.id, {
@@ -43,9 +41,9 @@ exports.socketServer = (socket) => {
   });
 
   //Join a conversation room with conversation id
-  socket.on("Join conversation", (conversation) => {
-    socket.join(conversation);
-    console.log("User joined conversation: ", conversation);
+  socket.on("Join conversation", (conversationId) => {
+    socket.join(conversationId);
+    console.log("User joined conversation: ", conversationId);
   });
 
   //Send receive messages
@@ -67,6 +65,25 @@ exports.socketServer = (socket) => {
       socket
         .to(`${user.socketId}`)
         .emit("update conversationList", newConversation);
+    }
+  });
+
+  //OPEN Typing
+  socket.on("typing", ({ chattedUserId, typeTo }) => {
+    //console.log(id, id2);
+    const user = users.find((user) => user.id === chattedUserId);
+    console.log(user);
+    if (user) {
+      socket.to(`${user.socketId}`).emit("openTypingToClient", typeTo);
+    }
+  });
+  //Stop Typing
+  socket.on("stop typing", (userId) => {
+    //console.log(userId);
+    const user = users.find((user) => user.id === userId);
+    console.log(user);
+    if (user) {
+      socket.to(`${user.socketId}`).emit("closeTypingToClient");
     }
   });
 };

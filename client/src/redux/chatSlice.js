@@ -7,6 +7,8 @@ const initialState = {
   notifications: [],
   userStatuses: [],
   chattedUser: null,
+  isTyping: false,
+  typeTo: null,
 };
 
 const chatSlicer = createSlice({
@@ -78,6 +80,14 @@ const chatSlicer = createSlice({
           : msg
       );
     },
+    reduxStartTyping: (state, action) => {
+      console.log(action.payload);
+      state.isTyping = action.payload.situation;
+      state.typeTo = action.payload.id;
+    },
+    reduxStopTyping: (state, action) => {
+      state.isTyping = action.payload;
+    },
   },
 });
 
@@ -93,6 +103,8 @@ export const {
   reduxAddMyMessagesFromSocket,
   reduxSetChattedUser,
   reduxRemoveActiveConversation,
+  reduxStartTyping,
+  reduxStopTyping,
 } = chatSlicer.actions;
 
 export default chatSlicer.reducer;

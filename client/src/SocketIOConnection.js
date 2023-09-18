@@ -4,6 +4,8 @@ import { BACKEND_URL } from "./axios";
 import {
   reduxAddMyConversations,
   reduxAddMyMessagesFromSocket,
+  reduxStartTyping,
+  reduxStopTyping,
 } from "./redux/chatSlice";
 import {
   reduxAUserBecameOffline,
@@ -34,6 +36,13 @@ export const connectToSocketServer = () => {
     window.localStorage.setItem("onlineUsers", JSON.stringify(onUsers));
     store.dispatch(reduxAUserBecameOffline(id));
   });
+
+  socket.on("openTypingToClient", (typeTo) => {
+    store.dispatch(reduxStartTyping({ situation: true, id: typeTo }));
+  });
+  socket.on("closeTypingToClient", () => {
+    store.dispatch(reduxStopTyping(false));
+  });
 };
 //Emit user activities
 export const joinUser = (id) => {
@@ -53,4 +62,12 @@ export const createNewConversation = (newConversation, id) => {
 };
 export const logoutDisconnect = (id) => {
   socket?.emit("logout", id);
+};
+
+export const userStartMessageTyping = (chattedUserId, typeTo) => {
+  socket?.emit("typing", { chattedUserId, typeTo });
+};
+
+export const userStopMessageTyping = (chattedUserId) => {
+  socket?.emit("stop typing", chattedUserId);
 };

@@ -13,19 +13,22 @@ import {
   reduxAddMyMessages,
   reduxGetMyConversations,
   reduxSetChattedUser,
+  reduxStartStopTyping,
 } from "../../redux/chatSlice";
 import EmojiPicker from "emoji-picker-react";
 import AttachmentMenu from "./AttachmentMenu";
 import {
   createNewConversation,
   sendNewMessage,
+  userStartMessageTyping,
+  userStopMessageTyping,
 } from "../../SocketIOConnection";
 
 const ChatActions = () => {
   const dispatch = useDispatch();
   const messageRef = useRef(null);
 
-  const { activeConversation, chattedUser } = useSelector(
+  const { activeConversation, chattedUser, isTyping } = useSelector(
     (store) => store.messages
   );
   const { loggedUser } = useSelector((store) => store.currentUser);
@@ -69,6 +72,7 @@ const ChatActions = () => {
 
         //Socket send message
         sendNewMessage(data.populatedMessage, chattedUser._id);
+        userStopMessageTyping(chattedUser._id);
 
         setMessage("");
         setStatus(false);
@@ -77,6 +81,23 @@ const ChatActions = () => {
         toast.error(error.response.data.message);
       }
     }
+  };
+  const handleMessageType = (e) => {
+    setMessage(e.target.value);
+    if (!isTyping) {
+      //dispatch(reduxStartStopTyping(true));
+      userStartMessageTyping(chattedUser._id, loggedUser.id);
+    }
+    let lastTypeTime = new Date().getTime();
+    let timer = 2000;
+    setTimeout(() => {
+      let timeNow = new Date().getTime();
+      let tDifference = timeNow - lastTypeTime;
+      if (tDifference >= timer && isTyping) {
+        userStopMessageTyping(chattedUser._id);
+        //dispatch(reduxStartStopTyping(false));
+      }
+    }, timer);
   };
   const handleEmoji = (data) => {
     //console.log(emojiData);
@@ -142,7 +163,7 @@ const ChatActions = () => {
             className="w-full dark:bg-dark_hover_1 dark:text-dark_text_1 outline-none
               h-[45px] flex-1 rounded-lg pl-4"
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={handleMessageType}
             ref={messageRef}
           />
         </div>
