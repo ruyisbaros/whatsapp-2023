@@ -71,7 +71,7 @@ const ChatActions = () => {
 
         //Socket send message
         sendNewMessage(data.populatedMessage, chattedUser._id);
-        userStopMessageTyping(chattedUser._id);
+        userStopMessageTyping(chattedUser._id, activeConversation);
 
         setMessage("");
         setStatus(false);

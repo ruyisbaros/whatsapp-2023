@@ -9,6 +9,7 @@ const initialState = {
   chattedUser: null,
   isTyping: false,
   typeTo: null,
+  files: [],
 };
 
 const chatSlicer = createSlice({
@@ -103,6 +104,12 @@ const chatSlicer = createSlice({
           : c
       );
     },
+    reduxAddFile: (state, action) => {
+      state.files.push(action.payload);
+    },
+    reduxMakeFilesEmpty: (state, action) => {
+      state.files = [];
+    },
   },
 });
 
@@ -120,6 +127,8 @@ export const {
   reduxRemoveActiveConversation,
   reduxStartTyping,
   reduxStopTyping,
+  reduxAddFile,
+  reduxMakeFilesEmpty,
 } = chatSlicer.actions;
 
 export default chatSlicer.reducer;

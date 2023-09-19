@@ -2,11 +2,12 @@ import React from "react";
 import {
   CameraIcon,
   ContactIcon,
-  PhotoIcon,
   PollIcon,
   StickerIcon,
 } from "../../assets/svg";
 import DocumentIcon from "./../../assets/svg/Document";
+import PhotoAttachment from "./../attachments/PhotoAttachment";
+import DocumentAttachment from "./../attachments/DocumentAttachment";
 
 const AttachmentMenu = () => {
   return (
@@ -22,9 +23,7 @@ const AttachmentMenu = () => {
         </button>
       </li>
       <li>
-        <button type="button" className="bg-[#5f66cd] rounded-full">
-          <DocumentIcon />
-        </button>
+        <DocumentAttachment />
       </li>
       <li>
         <button type="button" className="bg-[#d3396d] rounded-full">
@@ -37,9 +36,7 @@ const AttachmentMenu = () => {
         </button>
       </li>
       <li>
-        <button type="button" className=" bg-[#bf59cf] rounded-full">
-          <PhotoIcon />
-        </button>
+        <PhotoAttachment />
       </li>
     </ul>
   );
