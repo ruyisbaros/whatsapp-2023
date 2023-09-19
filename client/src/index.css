@@ -64,6 +64,9 @@
     overflow-y: auto;
     overflow-x: hidden;
   }
+  .hView {
+    height: calc(100vh - 300px);
+  }
 }
 
 /* rotateAnimation */

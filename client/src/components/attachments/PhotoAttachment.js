@@ -38,6 +38,7 @@ const PhotoAttachment = () => {
         reader.onload = (e) => {
           dispatch(
             reduxAddFile({
+              file: file,
               data: e.target.result,
               type: getFileType(file.type),
             })

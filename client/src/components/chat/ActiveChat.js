@@ -9,6 +9,7 @@ import {
   reduxMakeMessagesSeen,
 } from "../../redux/chatSlice";
 import ChatActions from "./ChatActions";
+import FilePreview from "../previews/file/FilePreview";
 
 const ActiveChat = () => {
   const dispatch = useDispatch();
@@ -62,7 +63,7 @@ const ActiveChat = () => {
     <div className="relative w-full h-full  ">
       <ChatHeader />
       {files.length > 0 ? (
-        "files"
+        <FilePreview />
       ) : (
         <>
           <ChatMessages />

@@ -4,7 +4,7 @@ import Notifications from "./Notifications";
 import SearchBar from "./SearchBar";
 import Conversations from "./Conversations";
 import SearchResults from "./SearchResults";
-import { useSelector } from "react-redux";
+//import { useSelector } from "react-redux";
 
 const SidebarLeft = () => {
   const [searchResults, setSearchResults] = useState([]);
