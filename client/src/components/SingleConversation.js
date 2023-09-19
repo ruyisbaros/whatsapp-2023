@@ -9,7 +9,7 @@ import { joinAConversation } from "../SocketIOConnection";
 const SingleConversation = ({ convo }) => {
   const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
-  const { activeConversation, messages } = useSelector(
+  const { activeConversation, messages, isTyping, typeTo } = useSelector(
     (store) => store.messages
   );
 
@@ -82,7 +82,11 @@ const SingleConversation = ({ convo }) => {
             <div>
               <div className="flex items-center gap-x-1 dark:text-dark_text_2">
                 <div className="flex-1 items-center gap-x-1">
-                  <p>
+                  <p
+                    className={
+                      isTyping && typeTo === YOU._id ? "text-green-300" : ""
+                    }
+                  >
                     {convo.latestMessage
                       ? convo.latestMessage.message.length > 26
                         ? convo.latestMessage.message.slice(0, 26) + "..."
