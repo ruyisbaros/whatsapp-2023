@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { reduxLogout } from "../redux/currentUserSlice";
+import { reduxLogout } from "../../redux/currentUserSlice";
 import { toast } from "react-toastify";
-import axios from "../axios";
-import { reduxRemoveActiveConversation } from "../redux/chatSlice";
-import { logoutDisconnect } from "../SocketIOConnection";
+import axios from "../../axios";
+import { reduxRemoveActiveConversation } from "../../redux/chatSlice";
+import { logoutDisconnect } from "../../SocketIOConnection";
 const Menu = () => {
   const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);

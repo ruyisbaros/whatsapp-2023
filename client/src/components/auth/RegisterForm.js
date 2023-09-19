@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "../../utils/validadion";
-import CustomAuthInput from "../CustomAuthInput";
-import { useDispatch, useSelector } from "react-redux";
+import CustomAuthInput from "../sidebar/CustomAuthInput";
+import { useDispatch } from "react-redux";
 import { PulseLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import axios from "../../axios";
 import { toast } from "react-toastify";
 import { reduxRegisterUser } from "../../redux/currentUserSlice";
-import Picture from "../Picture";
+import Picture from "./Picture";
 
 const RegisterForm = () => {
   const dispatch = useDispatch();

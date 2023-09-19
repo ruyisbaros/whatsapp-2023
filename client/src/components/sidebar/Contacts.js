@@ -1,9 +1,9 @@
 import React from "react";
-import axios from "../axios";
+import axios from "../../axios";
 import { useDispatch } from "react-redux";
-import { reduxSetActiveConversation } from "../redux/chatSlice";
+import { reduxSetActiveConversation } from "../../redux/chatSlice";
 import { toast } from "react-toastify";
-import { joinAConversation } from "../SocketIOConnection";
+import { joinAConversation } from "../../SocketIOConnection";
 
 const Contacts = ({ contact }) => {
   const dispatch = useDispatch();

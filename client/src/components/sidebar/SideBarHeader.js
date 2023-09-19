@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import CommunityIcon from "./../assets/svg/Community";
-import StoryIcon from "./../assets/svg/Story";
-import ChatIcon from "./../assets/svg/Chat";
-import DotsIcon from "./../assets/svg/Dots";
+import CommunityIcon from "../../assets/svg/Community";
+import StoryIcon from "../../assets/svg/Story";
+import ChatIcon from "../../assets/svg/Chat";
+import DotsIcon from "../../assets/svg/Dots";
 import Menu from "./Menu";
 
 const SideBarHeader = () => {

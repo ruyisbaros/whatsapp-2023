@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import ReturnIcon from "./../assets/svg/Return";
-import SearchIcon from "./../assets/svg/Search";
-import FilterIcon from "./../assets/svg/FilterIcon";
-import axios from "../axios";
+import ReturnIcon from "../../assets/svg/Return";
+import SearchIcon from "../../assets/svg/Search";
+import FilterIcon from "../../assets/svg/FilterIcon";
+import axios from "../../axios";
 import { toast } from "react-toastify";
 
 const SearchBar = ({ searchResults, setSearchResults }) => {

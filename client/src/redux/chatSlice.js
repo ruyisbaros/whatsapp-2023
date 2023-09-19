@@ -18,6 +18,7 @@ const chatSlicer = createSlice({
   reducers: {
     reduxSetActiveConversation: (state, action) => {
       state.activeConversation = action.payload;
+      state.files = [];
     },
     reduxRemoveActiveConversation: (state, action) => {
       state.activeConversation = null;

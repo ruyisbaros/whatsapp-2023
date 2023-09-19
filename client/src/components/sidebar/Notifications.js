@@ -1,7 +1,7 @@
 import React from "react";
-import NotificationIcon from "./../assets/svg/Notification";
-import ArrowIcon from "./../assets/svg/Arrow";
-import CloseIcon from "./../assets/svg/Close";
+import NotificationIcon from "../../assets/svg/Notification";
+import ArrowIcon from "../../assets/svg/Arrow";
+import CloseIcon from "../../assets/svg/Close";
 
 const Notifications = () => {
   return (

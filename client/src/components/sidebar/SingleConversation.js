@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { dateHandler } from "../utils/momentHandler";
-import axios from "../axios";
+import { dateHandler } from "../../utils/momentHandler";
+import axios from "../../axios";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { reduxSetActiveConversation } from "../redux/chatSlice";
-import { joinAConversation } from "../SocketIOConnection";
+import { reduxSetActiveConversation } from "../../redux/chatSlice";
+import { joinAConversation } from "../../SocketIOConnection";
 
 const SingleConversation = ({ convo }) => {
   const dispatch = useDispatch();

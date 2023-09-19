@@ -12,7 +12,7 @@ import ChatActions from "./ChatActions";
 
 const ActiveChat = () => {
   const dispatch = useDispatch();
-  const { activeConversation } = useSelector((store) => store.messages);
+  const { activeConversation, files } = useSelector((store) => store.messages);
   const { loggedUser } = useSelector((store) => store.currentUser);
 
   const fetchRelevantMessages = useCallback(async () => {
@@ -61,8 +61,14 @@ const ActiveChat = () => {
   return (
     <div className="relative w-full h-full  ">
       <ChatHeader />
-      <ChatMessages />
-      <ChatActions />
+      {files.length > 0 ? (
+        "files"
+      ) : (
+        <>
+          <ChatMessages />
+          <ChatActions />
+        </>
+      )}
     </div>
   );
 };
