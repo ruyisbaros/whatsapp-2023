@@ -69,21 +69,24 @@ exports.socketServer = (socket) => {
   });
 
   //OPEN Typing
-  socket.on("typing", ({ chattedUserId, typeTo }) => {
+  socket.on("typing", ({ chattedUserId, typeTo, convo }) => {
     //console.log(id, id2);
     const user = users.find((user) => user.id === chattedUserId);
     console.log(user);
     if (user) {
-      socket.to(`${user.socketId}`).emit("openTypingToClient", typeTo);
+      socket
+        .to(`${user.socketId}`)
+        .emit("openTypingToClient", { typeTo, convo });
     }
   });
   //Stop Typing
-  socket.on("stop typing", (userId) => {
+  socket.on("stop typing", ({ chattedUserId, convo }) => {
     //console.log(userId);
-    const user = users.find((user) => user.id === userId);
+    //console.log(convo);
+    const user = users.find((user) => user.id === chattedUserId);
     console.log(user);
     if (user) {
-      socket.to(`${user.socketId}`).emit("closeTypingToClient");
+      socket.to(`${user.socketId}`).emit("closeTypingToClient", { convo });
     }
   });
 };

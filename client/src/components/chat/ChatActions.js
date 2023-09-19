@@ -13,7 +13,6 @@ import {
   reduxAddMyMessages,
   reduxGetMyConversations,
   reduxSetChattedUser,
-  reduxStartStopTyping,
 } from "../../redux/chatSlice";
 import EmojiPicker from "emoji-picker-react";
 import AttachmentMenu from "./AttachmentMenu";
@@ -85,17 +84,19 @@ const ChatActions = () => {
   const handleMessageType = (e) => {
     setMessage(e.target.value);
     if (!isTyping) {
-      //dispatch(reduxStartStopTyping(true));
-      userStartMessageTyping(chattedUser._id, loggedUser.id);
+      userStartMessageTyping(
+        chattedUser._id,
+        loggedUser.id,
+        activeConversation
+      );
     }
     let lastTypeTime = new Date().getTime();
-    let timer = 2000;
+    let timer = 1000;
     setTimeout(() => {
       let timeNow = new Date().getTime();
       let tDifference = timeNow - lastTypeTime;
       if (tDifference >= timer && isTyping) {
-        userStopMessageTyping(chattedUser._id);
-        //dispatch(reduxStartStopTyping(false));
+        userStopMessageTyping(chattedUser._id, activeConversation);
       }
     }, timer);
   };
@@ -165,6 +166,9 @@ const ChatActions = () => {
             value={message}
             onChange={handleMessageType}
             ref={messageRef}
+            onBlur={() =>
+              userStopMessageTyping(chattedUser._id, activeConversation)
+            }
           />
         </div>
         {/* Send */}

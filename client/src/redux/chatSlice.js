@@ -81,12 +81,27 @@ const chatSlicer = createSlice({
       );
     },
     reduxStartTyping: (state, action) => {
-      console.log(action.payload);
+      //console.log(action.payload);
       state.isTyping = action.payload.situation;
       state.typeTo = action.payload.id;
+      state.conversations = state.conversations.map((c) =>
+        c._id === action.payload.convo._id
+          ? {
+              ...c,
+              latestMessage: { ...c.latestMessage, message: "Typing..." },
+            }
+          : c
+      );
     },
     reduxStopTyping: (state, action) => {
-      state.isTyping = action.payload;
+      state.isTyping = action.payload.situation;
+      console.log(action.payload.convo._id);
+      //Re Update latest message after stop typing
+      state.conversations = state.conversations.map((c) =>
+        c._id === action.payload.convo._id
+          ? { ...c, latestMessage: action.payload.convo.latestMessage }
+          : c
+      );
     },
   },
 });

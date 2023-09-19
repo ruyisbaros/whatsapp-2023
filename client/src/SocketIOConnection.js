@@ -37,11 +37,11 @@ export const connectToSocketServer = () => {
     store.dispatch(reduxAUserBecameOffline(id));
   });
 
-  socket.on("openTypingToClient", (typeTo) => {
-    store.dispatch(reduxStartTyping({ situation: true, id: typeTo }));
+  socket.on("openTypingToClient", ({ typeTo, convo }) => {
+    store.dispatch(reduxStartTyping({ situation: true, id: typeTo, convo }));
   });
-  socket.on("closeTypingToClient", () => {
-    store.dispatch(reduxStopTyping(false));
+  socket.on("closeTypingToClient", ({ convo }) => {
+    store.dispatch(reduxStopTyping({ situation: false, convo }));
   });
 };
 //Emit user activities
@@ -64,10 +64,10 @@ export const logoutDisconnect = (id) => {
   socket?.emit("logout", id);
 };
 
-export const userStartMessageTyping = (chattedUserId, typeTo) => {
-  socket?.emit("typing", { chattedUserId, typeTo });
+export const userStartMessageTyping = (chattedUserId, typeTo, convo) => {
+  socket?.emit("typing", { chattedUserId, typeTo, convo });
 };
 
-export const userStopMessageTyping = (chattedUserId) => {
-  socket?.emit("stop typing", chattedUserId);
+export const userStopMessageTyping = (chattedUserId, convo) => {
+  socket?.emit("stop typing", { chattedUserId, convo });
 };

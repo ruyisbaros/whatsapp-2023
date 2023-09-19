@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import SingleMessage from "./SingleMessage";
+import Typing from "./Typing";
 
 const ChatMessages = () => {
   const endRef = useRef();
@@ -29,7 +30,7 @@ const ChatMessages = () => {
                 me={loggedUser.id === message.sender?._id}
               />
             ))}
-        {isTyping && typeTo === chattedUser._id ? "typing..." : ""}
+        {isTyping && typeTo === chattedUser._id ? <Typing /> : ""}
         <div ref={endRef} className="h-[30px]"></div>
       </div>
     </div>
