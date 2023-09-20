@@ -1,6 +1,7 @@
 const MessageModel = require("../models/messageModel");
 const ConversationModel = require("../models/conversationModel.js");
 const User = require("../models/userModel");
+const { uploadImageToCloduinary } = require("../services/cloudinaryActions");
 
 const messageCtrl = {
   send_create_message: async (req, res) => {
@@ -15,19 +16,37 @@ const messageCtrl = {
       const messages = await MessageModel.find({
         conversation: convo_id,
       });
-      //1-Create message document in DB
+
+      //1- If there is files first upload them to cloud
+      let uploadedFiles = [];
+      if (files && files.length > 0) {
+        const urls = files.map(async (file) => {
+          const res = await uploadImageToCloduinary(
+            file.data,
+            "whatsapp_api",
+            file.type === "IMAGE"
+              ? "image"
+              : file.type === "VIDEO"
+              ? "video"
+              : "raw"
+          );
+          return { ...res, type: file.type };
+        });
+        uploadedFiles = await Promise.all(urls);
+      }
+      //2-Create message document in DB
       const createdMessage = await MessageModel.create({
         message,
         sender: my_id,
         recipient,
         conversation: convo_id,
-        files: files || [],
+        files: files && files.length > 0 ? uploadedFiles : [],
       });
-      //2. Update relevant conversation's latestMessage (each new message will be the latestMessage)
+      //3. Update relevant conversation's latestMessage (each new message will be the latestMessage)
       await ConversationModel.findByIdAndUpdate(convo_id, {
         latestMessage: createdMessage,
       });
-      //3. IMPORTANT. if below returns 0 means first time chat started. So
+      //4. IMPORTANT. if below returns 0 means first time chat started. So
       //we will send conversations only for newly started chats between 2 users. Not always!
       if (messages.length === 0) {
         conversations = await ConversationModel.find({
@@ -49,7 +68,7 @@ const messageCtrl = {
           })
           .sort({ updatedAt: -1 });
       }
-      //4 -Populate newly created message before send
+      //5 -Populate newly created message before send
       const populatedMessage = await MessageModel.findById(createdMessage._id)
         .populate("sender", "-password")
         .populate("recipient", "-password")

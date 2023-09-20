@@ -15,7 +15,7 @@ const authCtrl = {
       const { name, email, password, picture, status } = req.body;
       let image;
       if (picture) {
-        image = await uploadImageToCloduinary(picture, "whatsapp_api");
+        image = await uploadImageToCloduinary(picture, "whatsapp_api", "image");
       }
       const newUser = await User.create({
         name: name.toLowerCase(),

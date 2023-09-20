@@ -6,12 +6,14 @@ cloudinary.v2.config({
   api_key: process.env.CLOUD_KEY,
   api_secret: process.env.CLOUD_SECRET,
 });
-exports.uploadImageToCloduinary = (file, folder) => {
+/* https://res.cloudinary.com/ruyisbaros/image/upload/v1695215546/whatsapp_api/j7pek5thddo5stmzfmem.jpg */
+exports.uploadImageToCloduinary = (file, folder, type) => {
   return new Promise((resolve) => {
     cloudinary.v2.uploader.upload(
       file,
       {
         folder,
+        resource_type: type,
       },
       (err, res) => {
         if (err) {

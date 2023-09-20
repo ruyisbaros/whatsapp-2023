@@ -16,6 +16,7 @@ import {
   userStartMessageTyping,
   userStopMessageTyping,
 } from "../../../SocketIOConnection";
+import { ClipLoader } from "react-spinners";
 
 const PreviewFooter = ({
   message,
@@ -54,7 +55,7 @@ const PreviewFooter = ({
             "You can upload pdf, text, doc, powerPoint, zip, jpeg, gif, png, webp, mp4 and webm types!"
           );
           return;
-        } else if (file.size > 1024 * 1024 * 5) {
+        } else if (file.size > 1024 * 1024 * 20) {
           files = files.filter((item) => item.name !== file.name);
           toast.error("Max 5mb size allowed!");
           return;
@@ -73,7 +74,8 @@ const PreviewFooter = ({
       }
     });
   };
-  const handleMessageSend = async () => {
+  const handleMessageSend = async (e) => {
+    e.preventDefault();
     try {
       setStatus(true);
       const { data } = await axios.post("/message/send", {
@@ -95,16 +97,15 @@ const PreviewFooter = ({
           (cnv) => cnv._id === activeConversation._id
         );
         createNewConversation(convo, chattedUser._id);
-
-        dispatch(reduxAddMyMessages(data.populatedMessage));
-
-        //Socket send message
-        sendNewMessage(data.populatedMessage, chattedUser._id);
-        userStopMessageTyping(chattedUser._id, activeConversation);
-
-        setMessage("");
-        setStatus(false);
       }
+      dispatch(reduxAddMyMessages(data.populatedMessage));
+
+      //Socket send message
+      sendNewMessage(data.populatedMessage, chattedUser._id);
+      userStopMessageTyping(chattedUser._id, activeConversation);
+
+      setMessage("");
+      setStatus(false);
     } catch (error) {
       setStatus(false);
       toast.error(error.response.data.message);
@@ -129,7 +130,7 @@ const PreviewFooter = ({
       }
     }, timer);
   };
-  console.log(message, files);
+  //console.log(message, files);
   return (
     <div className="w-full flex flex-col items-center">
       <div className="w-full h-[40px] max-w-[60%] dark:bg-dark_hover_1 rounded-lg">
@@ -199,7 +200,11 @@ const PreviewFooter = ({
         cursor-pointer"
           onClick={handleMessageSend}
         >
-          <SendIcon className="dark:fill-white" />
+          {status ? (
+            <ClipLoader color="#e9edef" size={25} />
+          ) : (
+            <SendIcon className="dark:fill-white" />
+          )}
         </div>
       </div>
     </div>

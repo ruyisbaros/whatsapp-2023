@@ -59,3 +59,12 @@ const App = () => {
 };
 
 export default App;
+
+/* 
+
+import { extractPublicId } from 'cloudinary-build-url'
+
+const publicId = extractPublicId(
+    "http://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg"
+  ) 
+*/

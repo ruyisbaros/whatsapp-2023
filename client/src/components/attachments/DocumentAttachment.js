@@ -26,7 +26,7 @@ const DocumentAttachment = () => {
             "You can upload pdf, text, doc, powerPoint and zip types!"
           );
           return;
-        } else if (file.size > 1024 * 1024 * 5) {
+        } else if (file.size > 1024 * 1024 * 20) {
           files = files.filter((item) => item.name !== file.name);
           toast.error("Max 5mb size allowed!");
           return;

@@ -28,7 +28,7 @@ const PhotoAttachment = () => {
             "You can upload jpeg, gif, png, webp, mp4 and webm types!"
           );
           return;
-        } else if (file.size > 1024 * 1024 * 5) {
+        } else if (file.size > 1024 * 1024 * 20) {
           files = files.filter((item) => item.name !== file.name);
           toast.error("Max 5mb size allowed!");
           return;

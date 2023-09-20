@@ -72,7 +72,7 @@ exports.socketServer = (socket) => {
   socket.on("typing", ({ chattedUserId, typeTo, convo }) => {
     //console.log(id, id2);
     const user = users.find((user) => user.id === chattedUserId);
-    console.log(user);
+    //console.log(user);
     if (user) {
       socket
         .to(`${user.socketId}`)
@@ -84,7 +84,7 @@ exports.socketServer = (socket) => {
     //console.log(userId);
     //console.log(convo);
     const user = users.find((user) => user.id === chattedUserId);
-    console.log(user);
+    //console.log(user);
     if (user) {
       socket.to(`${user.socketId}`).emit("closeTypingToClient", { convo });
     }
