@@ -70,6 +70,10 @@
   .transCls {
     transform: translate(-50%, -50%);
   }
+
+  .fileThumbnail:hover .remove_media {
+    display: block;
+  }
 }
 
 /* rotateAnimation */

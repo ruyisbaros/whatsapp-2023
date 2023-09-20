@@ -26,7 +26,7 @@ const SearchBar = ({ searchResults, setSearchResults }) => {
       setSearchResults([]);
     }
   };
-  console.log(search);
+  //console.log(search);
   return (
     <div className="h-[49px] py-1 relative">
       <div className="px-[10px]">

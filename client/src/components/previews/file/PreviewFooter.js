@@ -8,6 +8,7 @@ import {
   reduxAddMyMessages,
   reduxGetMyConversations,
   reduxMakeFilesEmpty,
+  reduxRemoveFile,
 } from "../../../redux/chatSlice";
 import { toast } from "react-toastify";
 import axios from "../../../axios";
@@ -103,7 +104,7 @@ const PreviewFooter = ({
 
       //Socket send message
       sendNewMessage(data.populatedMessage, chattedUser._id);
-      userStopMessageTyping(chattedUser._id, activeConversation);
+      userStopMessageTyping(chattedUser._id, null, data.populatedMessage);
 
       //Make files empty
       dispatch(reduxMakeFilesEmpty());
@@ -129,11 +130,14 @@ const PreviewFooter = ({
       let timeNow = new Date().getTime();
       let tDifference = timeNow - lastTypeTime;
       if (tDifference >= timer && isTyping) {
-        userStopMessageTyping(chattedUser._id, activeConversation);
+        userStopMessageTyping(chattedUser._id, activeConversation, null);
       }
     }, timer);
   };
   //console.log(message, files);
+  const handleRemoveThumbnail = (index) => {
+    dispatch(reduxRemoveFile(index));
+  };
   return (
     <div className="w-full flex flex-col items-center">
       <div className="w-full h-[40px] max-w-[60%] dark:bg-dark_hover_1 rounded-lg">
@@ -144,7 +148,7 @@ const PreviewFooter = ({
           value={message}
           onChange={handleMessageType}
           onBlur={() =>
-            userStopMessageTyping(chattedUser._id, activeConversation)
+            userStopMessageTyping(chattedUser._id, activeConversation, null)
           }
         />
       </div>
@@ -156,7 +160,7 @@ const PreviewFooter = ({
             files.map((file, i) => (
               <div
                 key={i}
-                className={`w-14 h-14 border dark:border-white rounded-md  cursor-pointer relative ${
+                className={`fileThumbnail w-14 h-14 border dark:border-white rounded-md cursor-pointer relative ${
                   activeIndex === i
                     ? "border-[3px] p-[1px] !border-green_1 transition-all duration-[0.3s]"
                     : ""
@@ -176,6 +180,13 @@ const PreviewFooter = ({
                     className="w-8 h-10 mt-1.5 ml-2.5 object-cover"
                   />
                 )}
+                {/* Remove media */}
+                <div
+                  className="remove_media hidden"
+                  onClick={() => handleRemoveThumbnail(i)}
+                >
+                  <CloseIcon className="dark:fill-red-600 w-4 h-4 absolute right-0 top-0 cursor-pointer" />
+                </div>
               </div>
             ))}
           <div

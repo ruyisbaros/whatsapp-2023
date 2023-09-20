@@ -7,17 +7,17 @@ const PreviewBody = ({ activeIndex }) => {
   return (
     <div className="w-full max-w-[60%]">
       <div className="flex items-center justify-center">
-        {files[activeIndex].type === "IMAGE" ? (
+        {files[activeIndex]?.type === "IMAGE" ? (
           <img
-            src={files[activeIndex].data}
-            alt={files[activeIndex].type}
+            src={files[activeIndex]?.data}
+            alt={files[activeIndex]?.type}
             className="max-w-[80%] object-contain hView mb-3"
           />
         ) : (
           <div className="hView min-w-full flex flex-col items-center justify-center">
             <img
-              src={`/file/${files[activeIndex].type}.png`}
-              alt={files[activeIndex].type}
+              src={`/file/${files[activeIndex]?.type}.png`}
+              alt={files[activeIndex]?.type}
               className="w-[20%] object-contain"
             />
             <h1 className="dark:text-dark_text_2 text-2xl">

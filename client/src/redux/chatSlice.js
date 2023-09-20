@@ -129,7 +129,11 @@ const chatSlicer = createSlice({
       state.files.push(action.payload);
     },
     reduxRemoveFile: (state, action) => {
-      state.files = state.files.splice(action.payload, 1);
+      //state.files = state.files.splice(action.payload, 1);
+      const index = action.payload;
+      let files = [...state.files];
+      let fileToRemove = [files[index]];
+      state.files = files.filter((f) => !fileToRemove.includes(f));
     },
     reduxMakeFilesEmpty: (state, action) => {
       state.files = [];

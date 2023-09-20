@@ -16,7 +16,7 @@ const PreviewHeader = ({ activeIndex }) => {
           <CloseIcon className="dark:fill-dark_svg_1" />
         </div>
         <h1 className="dark:text-dark_text_1 text-[15px]">
-          {files[activeIndex].file?.name}
+          {files[activeIndex]?.file?.name}
         </h1>
         <span></span>
       </div>
