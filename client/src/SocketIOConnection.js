@@ -3,6 +3,7 @@ import { store } from "./redux/store";
 import { BACKEND_URL } from "./axios";
 import {
   reduxAddMyConversations,
+  reduxAddMyMessages,
   reduxAddMyMessagesFromSocket,
   reduxStartTyping,
   reduxStopTyping,
@@ -40,8 +41,8 @@ export const connectToSocketServer = () => {
   socket.on("openTypingToClient", ({ typeTo, convo }) => {
     store.dispatch(reduxStartTyping({ situation: true, id: typeTo, convo }));
   });
-  socket.on("closeTypingToClient", ({ convo }) => {
-    store.dispatch(reduxStopTyping({ situation: false, convo }));
+  socket.on("closeTypingToClient", ({ convo, message }) => {
+    store.dispatch(reduxStopTyping({ situation: false, convo, message }));
   });
 };
 //Emit user activities
@@ -68,6 +69,6 @@ export const userStartMessageTyping = (chattedUserId, typeTo, convo) => {
   socket?.emit("typing", { chattedUserId, typeTo, convo });
 };
 
-export const userStopMessageTyping = (chattedUserId, convo) => {
-  socket?.emit("stop typing", { chattedUserId, convo });
+export const userStopMessageTyping = (chattedUserId, convo, message) => {
+  socket?.emit("stop typing", { chattedUserId, convo, message });
 };

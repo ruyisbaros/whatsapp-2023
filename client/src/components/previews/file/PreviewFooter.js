@@ -7,6 +7,7 @@ import {
   reduxAddFile,
   reduxAddMyMessages,
   reduxGetMyConversations,
+  reduxMakeFilesEmpty,
 } from "../../../redux/chatSlice";
 import { toast } from "react-toastify";
 import axios from "../../../axios";
@@ -104,6 +105,8 @@ const PreviewFooter = ({
       sendNewMessage(data.populatedMessage, chattedUser._id);
       userStopMessageTyping(chattedUser._id, activeConversation);
 
+      //Make files empty
+      dispatch(reduxMakeFilesEmpty());
       setMessage("");
       setStatus(false);
     } catch (error) {

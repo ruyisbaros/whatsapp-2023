@@ -45,27 +45,31 @@ const chatSlicer = createSlice({
       state.messages = action.payload;
     },
     reduxAddMyMessages: (state, action) => {
+      console.log(action.payload);
       state.messages.push(action.payload);
       //Update latest message
       state.conversations = state.conversations.map((c) =>
         c._id === action.payload.conversation._id
-          ? { ...c, latestMessage: action.payload.conversation.latestMessage }
+          ? {
+              ...c,
+              latestMessage: { ...action.payload.conversation.latestMessage },
+            }
           : c
       );
     },
     reduxAddMyMessagesFromSocket: (state, action) => {
-      if (
-        state.activeConversation &&
-        action.payload?.conversation?._id === state.activeConversation?._id
-      ) {
-        state.messages.push({ ...action.payload, seen: true });
-      } else {
-        state.messages.push(action.payload);
-      }
+      state.messages.push(action.payload);
       //Update latest message
       state.conversations = state.conversations.map((c) =>
         c._id === action.payload.conversation._id
-          ? { ...c, latestMessage: action.payload.conversation.latestMessage }
+          ? {
+              ...c,
+              latestMessage: {
+                ...c.latestMessage,
+                message: action.payload.message,
+                files: action.payload.files,
+              },
+            }
           : c
       );
     },
@@ -90,20 +94,36 @@ const chatSlicer = createSlice({
         c._id === action.payload.convo._id
           ? {
               ...c,
-              latestMessage: { ...c.latestMessage, message: "Typing..." },
+              latestMessage: {
+                ...c.latestMessage,
+                message: "Typing...",
+                files: [],
+              },
             }
           : c
       );
     },
     reduxStopTyping: (state, action) => {
       state.isTyping = action.payload.situation;
-      console.log(action.payload.convo._id);
+      //console.log(action.payload.convo._id);
       //Re Update latest message after stop typing
-      state.conversations = state.conversations.map((c) =>
-        c._id === action.payload.convo._id
-          ? { ...c, latestMessage: action.payload.convo.latestMessage }
-          : c
-      );
+      if (action.payload.convo) {
+        state.conversations = state.conversations.map((c) =>
+          c._id === action.payload.convo._id
+            ? { ...c, latestMessage: action.payload.convo.latestMessage }
+            : c
+        );
+      } else if (action.payload.message) {
+        state.conversations = state.conversations.map((c) =>
+          c._id === action.payload.message.conversation._id
+            ? {
+                ...c,
+                latestMessage:
+                  action.payload.message.conversation.latestMessage,
+              }
+            : c
+        );
+      }
     },
     reduxAddFile: (state, action) => {
       state.files.push(action.payload);

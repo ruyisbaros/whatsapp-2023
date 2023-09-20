@@ -70,9 +70,9 @@ const ChatActions = () => {
 
         dispatch(reduxAddMyMessages(data.populatedMessage));
 
-        //Socket send message
+        //Socket send message convo,message
         sendNewMessage(data.populatedMessage, chattedUser._id);
-        userStopMessageTyping(chattedUser._id, activeConversation);
+        userStopMessageTyping(chattedUser._id, null, data.populatedMessage);
 
         setMessage("");
         setStatus(false);
@@ -97,7 +97,7 @@ const ChatActions = () => {
       let timeNow = new Date().getTime();
       let tDifference = timeNow - lastTypeTime;
       if (tDifference >= timer && isTyping) {
-        userStopMessageTyping(chattedUser._id, activeConversation);
+        userStopMessageTyping(chattedUser._id, activeConversation, null);
       }
     }, timer);
   };
@@ -173,7 +173,7 @@ const ChatActions = () => {
             onChange={handleMessageType}
             ref={messageRef}
             onBlur={() =>
-              userStopMessageTyping(chattedUser._id, activeConversation)
+              userStopMessageTyping(chattedUser._id, activeConversation, null)
             }
           />
         </div>

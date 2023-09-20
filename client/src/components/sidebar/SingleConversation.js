@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { reduxSetActiveConversation } from "../../redux/chatSlice";
 import { joinAConversation } from "../../SocketIOConnection";
-
+import { MdPermMedia } from "react-icons/md";
 const SingleConversation = ({ convo }) => {
   const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
@@ -34,7 +34,7 @@ const SingleConversation = ({ convo }) => {
       const { data } = await axios.post("/conversation/open_create", {
         receiver_id: YOU._id,
       });
-      console.log(data);
+      //console.log(data);
       await dispatch(reduxSetActiveConversation(data));
       //socket
       joinAConversation(data._id);
@@ -82,17 +82,53 @@ const SingleConversation = ({ convo }) => {
             <div>
               <div className="flex items-center gap-x-1 dark:text-dark_text_2">
                 <div className="flex-1 items-center gap-x-1">
-                  <p
-                    className={
+                  <div
+                    className={`w-full ${
                       isTyping && typeTo === YOU._id ? "text-green-300" : ""
-                    }
+                    }`}
                   >
-                    {convo.latestMessage
-                      ? convo.latestMessage.message.length > 26
-                        ? convo.latestMessage.message.slice(0, 26) + "..."
-                        : convo.latestMessage.message
-                      : ""}
-                  </p>
+                    {convo.latestMessage &&
+                    convo.latestMessage?.message &&
+                    convo.latestMessage?.files <= 0 ? (
+                      convo.latestMessage.message.length > 20 ? (
+                        <span>
+                          {convo.latestMessage.message.slice(0, 20) + "..."}
+                        </span>
+                      ) : (
+                        <span>{convo.latestMessage.message}</span>
+                      )
+                    ) : convo.latestMessage &&
+                      convo.latestMessage?.message &&
+                      convo.latestMessage?.files.length > 0 ? (
+                      convo.latestMessage.message.length > 20 ? (
+                        <p className="w-full flex items-center justify-between">
+                          <span>
+                            {convo.latestMessage.message.slice(0, 20) + "..."}
+                          </span>
+                          <span className="ml-8">
+                            <MdPermMedia color="#00a884" />
+                          </span>
+                        </p>
+                      ) : (
+                        <p className="w-full flex items-center justify-between">
+                          <span>{convo.latestMessage.message}</span>
+                          <span className="ml-8">
+                            <MdPermMedia color="#00a884" />
+                          </span>
+                        </p>
+                      )
+                    ) : (
+                      convo.latestMessage &&
+                      !convo.latestMessage?.message &&
+                      convo.latestMessage?.files.length > 0 && (
+                        <p className="mt-2">
+                          <span>
+                            <MdPermMedia color="#00a884" />
+                          </span>
+                        </p>
+                      )
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -114,3 +150,39 @@ const SingleConversation = ({ convo }) => {
 };
 
 export default SingleConversation;
+{
+  /*  {convo.latestMessage &&
+                    convo.latestMessage?.message &&
+                    convo.latestMessage?.files.length > 0 ? (
+                      convo.latestMessage.message.length > 20 ? (
+                        <p className="w-full flex items-center justify-between">
+                          <span>
+                            {convo.latestMessage.message.slice(0, 20) + "..."}
+                          </span>
+                          <span className="ml-8">
+                            <MdPermMedia color="#00a884" />
+                          </span>
+                        </p>
+                      ) : (
+                        <p className="w-full flex items-center justify-between">
+                          <span>{convo.latestMessage.message}</span>
+                          <span className="ml-8">
+                            <MdPermMedia color="#00a884" />
+                          </span>
+                        </p>
+                      )
+                    ) : (
+                      ""
+                    )} */
+}
+{
+  /*  {convo.latestMessage &&
+                      !convo.latestMessage?.message &&
+                      convo.latestMessage?.files.length > 0 && (
+                        <p className="mt-2">
+                          <span>
+                            <MdPermMedia color="#00a884" />
+                          </span>
+                        </p>
+                      )} */
+}
