@@ -108,6 +108,9 @@ const chatSlicer = createSlice({
     reduxAddFile: (state, action) => {
       state.files.push(action.payload);
     },
+    reduxRemoveFile: (state, action) => {
+      state.files = state.files.splice(action.payload, 1);
+    },
     reduxMakeFilesEmpty: (state, action) => {
       state.files = [];
     },
@@ -130,6 +133,7 @@ export const {
   reduxStopTyping,
   reduxAddFile,
   reduxMakeFilesEmpty,
+  reduxRemoveFile,
 } = chatSlicer.actions;
 
 export default chatSlicer.reducer;

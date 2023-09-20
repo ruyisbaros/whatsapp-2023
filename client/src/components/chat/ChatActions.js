@@ -54,6 +54,7 @@ const ChatActions = () => {
           recipient: chattedUser._id,
         });
         console.log(data);
+        //Means first time chat
         if (data.conversations) {
           dispatch(
             reduxGetMyConversations(
@@ -147,10 +148,15 @@ const ChatActions = () => {
                 setShowEmoji(false);
               }}
             >
+              {/* <span className="rotate-45">
+              <CloseIcon />
+            </span> */}
               {showAttachment ? (
                 <CloseIcon className="turnIcon dark:fill-dark_svg_1" />
               ) : (
-                <AttachmentIcon className="dark:fill-dark_svg_1" />
+                <span className="rotate-45">
+                  <CloseIcon className="dark:fill-dark_svg_1" />
+                </span>
               )}
             </button>
             {showAttachment && <AttachmentMenu />}

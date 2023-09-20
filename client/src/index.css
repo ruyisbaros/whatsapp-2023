@@ -67,6 +67,9 @@
   .hView {
     height: calc(100vh - 300px);
   }
+  .transCls {
+    transform: translate(-50%, -50%);
+  }
 }
 
 /* rotateAnimation */
