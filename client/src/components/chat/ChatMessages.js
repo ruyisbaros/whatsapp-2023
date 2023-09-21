@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import SingleMessage from "./SingleMessage";
 import Typing from "./Typing";
+import ShowFileInMessage from "./ShowFileInMessage";
 
 const ChatMessages = () => {
   const endRef = useRef();
@@ -24,14 +25,28 @@ const ChatMessages = () => {
                 msg.sender._id === loggedUser?.id
             )
             .map((message) => (
-              <SingleMessage
-                key={message._id}
-                msg={message}
-                me={loggedUser.id === message.sender?._id}
-              />
+              <>
+                {message.files.length > 0
+                  ? message.files.map((f, i) => (
+                      <ShowFileInMessage
+                        key={i}
+                        file={f}
+                        me={loggedUser.id === message.sender?._id}
+                        msg={message}
+                      />
+                    ))
+                  : null}
+                {message.message.length > 0 ? (
+                  <SingleMessage
+                    key={message._id}
+                    msg={message}
+                    me={loggedUser.id === message.sender?._id}
+                  />
+                ) : null}
+              </>
             ))}
         {isTyping && typeTo === chattedUser._id ? <Typing /> : ""}
-        <div ref={endRef} className="h-[30px]"></div>
+        <div ref={endRef} className="h-[40px]"></div>
       </div>
     </div>
   );

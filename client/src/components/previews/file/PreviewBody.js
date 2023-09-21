@@ -13,6 +13,12 @@ const PreviewBody = ({ activeIndex }) => {
             alt={files[activeIndex]?.type}
             className="max-w-[80%] object-contain hView mb-3"
           />
+        ) : files[activeIndex]?.type === "VIDEO" ? (
+          <video
+            src={files[activeIndex]?.data}
+            controls
+            className="max-w-[80%] object-contain hView mb-3"
+          ></video>
         ) : (
           <div className="hView min-w-full flex flex-col items-center justify-center">
             <img

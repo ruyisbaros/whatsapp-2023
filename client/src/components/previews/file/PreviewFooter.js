@@ -173,11 +173,16 @@ const PreviewFooter = ({
                     alt=""
                     className="w-full h-full object-cover"
                   />
+                ) : file.type === "VIDEO" ? (
+                  <video
+                    src={file.data}
+                    className="w-full h-full object-cover"
+                  ></video>
                 ) : (
                   <img
                     src={`/file/${file.type}.png`}
                     alt=""
-                    className="w-8 h-10 mt-1.5 ml-2.5 object-cover"
+                    className="w-8 h-10 mt-1.5 ml-2.5 object-contain"
                   />
                 )}
                 {/* Remove media */}
