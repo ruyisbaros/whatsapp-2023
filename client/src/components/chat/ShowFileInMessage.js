@@ -14,7 +14,7 @@ const ShowFileInMessage = ({ file, me, msg }) => {
         className={`relative rounded-lg
       ${me ? "bg-white border-[3px] border-green_3" : " text-dark_text_1"}`}
       >
-        <p className=" h-full text-sm">
+        <div className=" h-full text-sm">
           {file.type === "IMAGE" ? (
             <img
               src={file.url}
@@ -57,7 +57,7 @@ const ShowFileInMessage = ({ file, me, msg }) => {
               </div>
             </div>
           )}
-        </p>
+        </div>
         <span className="absolute right-1.5 bottom-1.5 text-xs text-dark_text_3 leading-none">
           {moment(msg.createdAt).format("HH:mm")}
         </span>

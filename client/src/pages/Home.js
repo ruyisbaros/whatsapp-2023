@@ -6,12 +6,18 @@ import { toast } from "react-toastify";
 import { reduxGetMyConversations } from "../redux/chatSlice";
 import WhatsappHome from "../components/chat/WhatsappHome";
 import ActiveChat from "../components/chat/ActiveChat";
+import Calls from "../components/video_calls/Calls";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { activeConversation } = useSelector((store) => store.messages);
   //const { loggedUser } = useSelector((store) => store.currentUser);
   const [status, setStatus] = useState(false);
+  const [call, setCall] = useState({
+    getCall: true,
+    callEnded: false,
+    callAccepted: false,
+  });
 
   const fetchMyConversations = useCallback(async () => {
     try {
@@ -32,13 +38,17 @@ const Home = () => {
   }, [fetchMyConversations]);
 
   return (
-    <div className="relative h-screen dark:bg-dark_bg_1 overflow-hidden borderC">
-      <div className="headBanner"></div>
-      <div className="container h-[95%] pt-[19px] flex dark:bg-dark_bg_1">
-        <SidebarLeft />
-        {activeConversation ? <ActiveChat /> : <WhatsappHome />}
+    <>
+      <div className="relative h-screen dark:bg-dark_bg_1 overflow-hidden borderC">
+        <div className="headBanner"></div>
+        <div className="container h-[95%] pt-[19px] flex dark:bg-dark_bg_1">
+          <SidebarLeft />
+          {activeConversation ? <ActiveChat /> : <WhatsappHome />}
+        </div>
       </div>
-    </div>
+      {/* Calls */}
+      <Calls call={call} setCall={setCall} />
+    </>
   );
 };
 
