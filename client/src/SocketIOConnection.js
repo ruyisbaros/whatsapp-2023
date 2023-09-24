@@ -12,6 +12,7 @@ import {
   reduxAUserBecameOffline,
   reduxSetOnlineUsers,
 } from "./redux/currentUserSlice";
+import { reduxSetVideoSocket } from "./redux/videoSlice";
 let socket;
 
 export const connectToSocketServer = () => {
@@ -43,6 +44,11 @@ export const connectToSocketServer = () => {
   });
   socket.on("closeTypingToClient", ({ convo, message }) => {
     store.dispatch(reduxStopTyping({ situation: false, convo, message }));
+  });
+
+  /* Videos */
+  socket.on("setup socketId", (id) => {
+    store.dispatch(reduxSetVideoSocket(id));
   });
 };
 //Emit user activities

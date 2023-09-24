@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import SidebarLeft from "../components/sidebar/SidebarLeft";
 import axios from "../axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,26 +9,41 @@ import ActiveChat from "../components/chat/ActiveChat";
 import Calls from "../components/video_calls/Calls";
 
 const Home = () => {
+  const myVideo = useRef(null);
+  const inComingVideo = useRef(null);
   const dispatch = useDispatch();
   const { activeConversation } = useSelector((store) => store.messages);
+  const { videoWithSocketId } = useSelector((store) => store.videos);
   //const { loggedUser } = useSelector((store) => store.currentUser);
-  const [status, setStatus] = useState(false);
-  const [call, setCall] = useState({
-    getCall: true,
-    callEnded: false,
-    callAccepted: false,
-  });
+  console.log(videoWithSocketId);
+
+  const [stream, setStream] = useState();
+  const enableMedia = () => {
+    myVideo.current.srcObject = stream;
+  };
+  const callUser = () => {
+    enableMedia();
+  };
+
+  const setUpMedia = () => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setStream(stream);
+      });
+  };
+
+  useEffect(() => {
+    setUpMedia();
+  }, []);
 
   const fetchMyConversations = useCallback(async () => {
     try {
-      setStatus(true);
       const { data } = await axios.get("/conversation/my_conversations");
       console.log(data);
       console.log(data.filter((dt) => dt.latestMessage));
       dispatch(reduxGetMyConversations(data.filter((dt) => dt.latestMessage)));
-      setStatus(false);
     } catch (error) {
-      setStatus(false);
       toast.error(error.response.data.message);
     }
   }, [dispatch]);
@@ -43,11 +58,15 @@ const Home = () => {
         <div className="headBanner"></div>
         <div className="container h-[95%] pt-[19px] flex dark:bg-dark_bg_1">
           <SidebarLeft />
-          {activeConversation ? <ActiveChat /> : <WhatsappHome />}
+          {activeConversation ? (
+            <ActiveChat callUser={callUser} />
+          ) : (
+            <WhatsappHome />
+          )}
         </div>
       </div>
       {/* Calls */}
-      <Calls call={call} setCall={setCall} />
+      <Calls myVideo={myVideo} inComingVideo={inComingVideo} stream={stream} />
     </>
   );
 };

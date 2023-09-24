@@ -2,7 +2,7 @@ import React from "react";
 
 const CallAreaInfo = ({ name }) => {
   return (
-    <div className="absolute top-12 w-full p-1">
+    <div className="absolute top-12 z40 w-full p-1">
       <div className="flex flex-col items-center">
         <div className="flex flex-col items-center gap-y-1">
           <h1 className="text-white text-lg capitalize">

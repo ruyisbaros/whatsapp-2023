@@ -3,8 +3,11 @@ import { useSelector } from "react-redux";
 import SearchLargeIcon from "./../../assets/svg/SearchLarge";
 import DotsIcon from "../../assets/svg/Dots";
 import { dateHandler2 } from "../../utils/momentHandler";
+import { VideoCallIcon } from "./../../assets/svg/VideoCall";
+import { CallIcon } from "../../assets/svg";
+import { DialIcon } from "../../assets/svg/Dial";
 
-const ChatHeader = () => {
+const ChatHeader = ({ callUser }) => {
   const { activeConversation, chattedUser } = useSelector(
     (store) => store.messages
   );
@@ -51,6 +54,16 @@ const ChatHeader = () => {
         </div>
         {/* Right side icons */}
         <ul className="flex items-center gap-x-2.5">
+          <li onClick={callUser}>
+            <button className="btn">
+              <VideoCallIcon />
+            </button>
+          </li>
+          <li>
+            <button className="btn rotate-[135deg]">
+              <DialIcon className="fill-blue-500 scale-[80%] w-6" />
+            </button>
+          </li>
           <li>
             <button className="btn">
               <SearchLargeIcon className="dark:fill-dark_svg_1" />

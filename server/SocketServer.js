@@ -10,6 +10,7 @@ exports.socketServer = (socket) => {
       users.push({ id, socketId: socket.id });
       socket.broadcast.emit("onlineUsers", users);
     }
+    socket.emit("setup socketId", socket.id);
     console.log(users);
   });
 

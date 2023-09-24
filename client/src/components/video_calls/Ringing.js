@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TiCancel } from "react-icons/ti";
 import { ValidIcon } from "./../../assets/svg/Valid";
 import sendCall from "../../assets/audio/ringtone.mp3";
-//import sendCall2 from "/audio/ringtone.mp3";
+import { reduxGetVideoCallFalse } from "../../redux/videoSlice";
 
-const Ringing = ({ call, setCall }) => {
-  //const { getCall, callEnded, callAccepted } = call;
+const Ringing = () => {
+  const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
   const [ringTimer, setRingTimer] = useState(0);
 
@@ -21,7 +21,7 @@ const Ringing = ({ call, setCall }) => {
       //setCall((prev) => ({ ...prev, getCall: true }));
       handleTimer();
     } else {
-      setCall((prev) => ({ ...prev, getCall: false }));
+      dispatch(reduxGetVideoCallFalse());
       setRingTimer(0);
     }
     return () => {
@@ -31,7 +31,7 @@ const Ringing = ({ call, setCall }) => {
 
   return (
     <div
-      className="dark:bg-dark_bg_1 rounded-lg fixed top-1/2 left-1/2 
+      className="w-full dark:bg-dark_bg_1 rounded-lg fixed top-1/2 left-1/2 
   -translate-x-1/2 -translate-y-1/2 shadow-lg z-50"
     >
       {/* Container */}
@@ -41,7 +41,7 @@ const Ringing = ({ call, setCall }) => {
           <img
             src={loggedUser.picture}
             alt="called user"
-            className="w-28 h-28 rounded-full "
+            className="w-20 h-20 rounded-full "
           />
           <div>
             <h1 className="dark:text-white">

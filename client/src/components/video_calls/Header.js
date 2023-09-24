@@ -4,7 +4,7 @@ import { AddContactIcon } from "../../assets/svg/AddContact";
 
 const Header = () => {
   return (
-    <header className="absolute t-0 w-full z-40">
+    <header className="absolute t-0 w-full z30">
       <div className="flex items-center justify-between p-1">
         <button className="btn">
           <span className="rotate-180 scale-150">
