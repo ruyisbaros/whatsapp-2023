@@ -29,7 +29,7 @@ const ChatMessages = () => {
                 {message.files.length > 0
                   ? message.files.map((f, i) => (
                       <ShowFileInMessage
-                        key={i}
+                        key={f.public_id}
                         file={f}
                         me={loggedUser.id === message.sender?._id}
                         msg={message}

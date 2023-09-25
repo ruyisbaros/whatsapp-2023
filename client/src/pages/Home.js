@@ -7,22 +7,48 @@ import { reduxGetMyConversations } from "../redux/chatSlice";
 import WhatsappHome from "../components/chat/WhatsappHome";
 import ActiveChat from "../components/chat/ActiveChat";
 import Calls from "../components/video_calls/Calls";
+import Peer from "simple-peer";
+import { callAUserSocket } from "../SocketIOConnection";
+import {
+  reduxGetVideoCallFalse,
+  reduxGetVideoCallTrue,
+  reduxShowVideoTrue,
+} from "../redux/videoSlice";
 
 const Home = () => {
   const myVideo = useRef(null);
   const inComingVideo = useRef(null);
   const dispatch = useDispatch();
-  const { activeConversation } = useSelector((store) => store.messages);
-  const { videoWithSocketId } = useSelector((store) => store.videos);
+  const { activeConversation, chattedUser } = useSelector(
+    (store) => store.messages
+  );
+  const { mySocketId } = useSelector((store) => store.videos.callData);
+  const { loggedUser } = useSelector((store) => store.currentUser);
   //const { loggedUser } = useSelector((store) => store.currentUser);
-  console.log(videoWithSocketId);
+  console.log(mySocketId);
 
   const [stream, setStream] = useState();
   const enableMedia = () => {
+    //inComingVideo.current.srcObject = stream;
     myVideo.current.srcObject = stream;
   };
   const callUser = () => {
     enableMedia();
+    dispatch(reduxShowVideoTrue());
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream,
+    });
+    peer.on("signal", (data) => {
+      callAUserSocket({
+        userToCall: chattedUser._id,
+        signal: data,
+        from: mySocketId,
+        name: loggedUser.name,
+        picture: loggedUser.picture,
+      });
+    });
   };
 
   const setUpMedia = () => {
@@ -30,6 +56,9 @@ const Home = () => {
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
         setStream(stream);
+      })
+      .catch((e) => {
+        console.log(e);
       });
   };
 

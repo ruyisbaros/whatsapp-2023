@@ -3,7 +3,6 @@ import { store } from "./redux/store";
 import { BACKEND_URL } from "./axios";
 import {
   reduxAddMyConversations,
-  reduxAddMyMessages,
   reduxAddMyMessagesFromSocket,
   reduxStartTyping,
   reduxStopTyping,
@@ -12,7 +11,12 @@ import {
   reduxAUserBecameOffline,
   reduxSetOnlineUsers,
 } from "./redux/currentUserSlice";
-import { reduxSetVideoSocket } from "./redux/videoSlice";
+import {
+  reduxGetVideoCallFalse,
+  reduxGetVideoCallTrue,
+  reduxSetCallingUser,
+  reduxSetMySocketId,
+} from "./redux/videoSlice";
 let socket;
 
 export const connectToSocketServer = () => {
@@ -48,7 +52,15 @@ export const connectToSocketServer = () => {
 
   /* Videos */
   socket.on("setup socketId", (id) => {
-    store.dispatch(reduxSetVideoSocket(id));
+    console.log("remote socket id ", id);
+    store.dispatch(reduxSetMySocketId(id));
+  });
+  socket.on("call user", ({ signal, from, name, picture }) => {
+    store.dispatch(reduxSetCallingUser({ signal, from, name, picture }));
+    store.dispatch(reduxGetVideoCallTrue());
+  });
+  socket.on("end call user", () => {
+    store.dispatch(reduxGetVideoCallFalse());
   });
 };
 //Emit user activities
@@ -77,4 +89,23 @@ export const userStartMessageTyping = (chattedUserId, typeTo, convo) => {
 
 export const userStopMessageTyping = (chattedUserId, convo, message) => {
   socket?.emit("stop typing", { chattedUserId, convo, message });
+};
+
+export const callAUserSocket = ({
+  userToCall,
+  signal,
+  from,
+  name,
+  picture,
+}) => {
+  socket?.emit("call user", {
+    userToCall,
+    signal,
+    from,
+    name,
+    picture,
+  });
+};
+export const endCallUserSocket = (userId) => {
+  socket?.emit("end call user", userId);
 };

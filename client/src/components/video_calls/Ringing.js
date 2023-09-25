@@ -3,11 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { TiCancel } from "react-icons/ti";
 import { ValidIcon } from "./../../assets/svg/Valid";
 import sendCall from "../../assets/audio/ringtone.mp3";
-import { reduxGetVideoCallFalse } from "../../redux/videoSlice";
+import {
+  reduxGetVideoCallFalse,
+  reduxGetVideoCallTrue,
+  reduxShowVideoFalse,
+} from "../../redux/videoSlice";
 
 const Ringing = () => {
   const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
+  const { callingUser } = useSelector((store) => store.videos);
   const [ringTimer, setRingTimer] = useState(0);
 
   let interval;
@@ -16,22 +21,24 @@ const Ringing = () => {
       setRingTimer((prev) => prev + 1);
     }, 1000);
   };
+  console.log(ringTimer);
   useEffect(() => {
-    if (ringTimer < 5) {
+    if (ringTimer <= 30) {
       //setCall((prev) => ({ ...prev, getCall: true }));
       handleTimer();
-    } else {
+    } else if (ringTimer > 10) {
+      console.log("Inside else block");
       dispatch(reduxGetVideoCallFalse());
-      setRingTimer(0);
+      //dispatch(reduxSendVideoCallFalse());
     }
     return () => {
       clearInterval(interval);
     };
-  }, [ringTimer]);
+  }, [ringTimer, dispatch]);
 
   return (
     <div
-      className="w-full dark:bg-dark_bg_1 rounded-lg fixed top-1/2 left-1/2 
+      className=" dark:bg-dark_bg_1 rounded-lg fixed top-1/2 left-1/2 
   -translate-x-1/2 -translate-y-1/2 shadow-lg z-50"
     >
       {/* Container */}
@@ -39,13 +46,13 @@ const Ringing = () => {
         {/* Call infos */}
         <div className="flex items-center gap-x-2 ">
           <img
-            src={loggedUser.picture}
+            src={callingUser?.picture}
             alt="called user"
             className="w-20 h-20 rounded-full "
           />
           <div>
             <h1 className="dark:text-white">
-              <b>Ahmet</b>
+              <b>{callingUser?.name}</b>
             </h1>
             <span className="dark:text-dark_text_2">Whatsapp video...</span>
           </div>
@@ -65,7 +72,7 @@ const Ringing = () => {
         </ul>
       </div>
       {/* Ring Voice */}
-      <audio src={sendCall} autoPlay loop></audio>
+      <audio src={sendCall} autoPlay muted loop></audio>
     </div>
   );
 };

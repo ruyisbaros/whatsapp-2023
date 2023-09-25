@@ -54,16 +54,20 @@ const ChatHeader = ({ callUser }) => {
         </div>
         {/* Right side icons */}
         <ul className="flex items-center gap-x-2.5">
-          <li onClick={callUser}>
-            <button className="btn">
-              <VideoCallIcon />
-            </button>
-          </li>
-          <li>
-            <button className="btn rotate-[135deg]">
-              <DialIcon className="fill-blue-500 scale-[80%] w-6" />
-            </button>
-          </li>
+          {onLineUsers.find((usr) => usr.id === chattedUser?._id) ? (
+            <li onClick={() => callUser()}>
+              <button className="btn">
+                <VideoCallIcon />
+              </button>
+            </li>
+          ) : null}
+          {onLineUsers.find((usr) => usr.id === chattedUser?._id) ? (
+            <li>
+              <button className="btn rotate-[135deg]">
+                <DialIcon className="fill-blue-500 scale-[80%] w-6" />
+              </button>
+            </li>
+          ) : null}
           <li>
             <button className="btn">
               <SearchLargeIcon className="dark:fill-dark_svg_1" />

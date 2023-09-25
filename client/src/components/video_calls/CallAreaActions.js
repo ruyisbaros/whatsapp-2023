@@ -3,8 +3,17 @@ import { ArrowIcon, MuteIcon } from "../../assets/svg";
 import { SpeakerIcon } from "./../../assets/svg/SpeakerIcon";
 import { VideoDialIcon } from "./../../assets/svg/VideoDeal";
 import { DialIcon } from "./../../assets/svg/Dial";
+import { useDispatch, useSelector } from "react-redux";
+import { reduxShowVideoFalse } from "../../redux/videoSlice";
+import { endCallUserSocket } from "../../SocketIOConnection";
 
 const CallAreaActions = () => {
+  const dispatch = useDispatch();
+  const { chattedUser } = useSelector((store) => store.messages);
+  const handleEndCall = () => {
+    endCallUserSocket(chattedUser._id);
+    dispatch(reduxShowVideoFalse());
+  };
   return (
     <div className="absolute bottom-0 h-22 w-full z40 px-1">
       <div className="relative bg-[#222] px-4 pt-6 pb-12 rounded-xl">
@@ -27,7 +36,7 @@ const CallAreaActions = () => {
               <MuteIcon className="fill-white w-5" />
             </button>
           </li>
-          <li>
+          <li onClick={handleEndCall}>
             <button className="btn_secondary bg-red-600 rotate-[135deg]">
               <DialIcon className="fill-white w-6" />
             </button>

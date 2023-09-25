@@ -1,49 +1,60 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  videoWith: null,
-  getCall: true,
-  callEnded: false,
-  callAccepted: false,
-  videoWithSocketId: null,
+  callingUser: null,
+  callData: {
+    getCall: false,
+    videoScreen: false,
+    callEnded: false,
+    callAccepted: false,
+    mySocketId: null,
+  },
 };
 
 const makeVideoSlice = createSlice({
   name: "videos",
   initialState,
   reducers: {
-    reduxSetupVideoWith: (state, action) => {
-      state.videoWith = action.payload;
+    reduxSetCallingUser: (state, action) => {
+      state.callingUser = action.payload;
+    },
+    reduxShowVideoTrue: (state, action) => {
+      state.callData.videoScreen = true;
+    },
+    reduxShowVideoFalse: (state, action) => {
+      state.callData.videoScreen = false;
     },
     reduxGetVideoCallTrue: (state, action) => {
-      state.getCall = true;
+      state.callData.getCall = true;
     },
     reduxGetVideoCallFalse: (state, action) => {
-      state.getCall = false;
+      state.callData.getCall = false;
     },
     reduxSetCallEnded: (state, action) => {
-      state.callEnded = true;
+      state.callData.callEnded = true;
     },
     reduxAcceptVideoCall: (state, action) => {
-      state.callAccepted = true;
+      state.callData.callAccepted = true;
     },
     reduxRejectVideoCall: (state, action) => {
-      state.callAccepted = false;
+      state.callData.callAccepted = false;
     },
-    reduxSetVideoSocket: (state, action) => {
-      state.videoWithSocketId = action.payload;
+    reduxSetMySocketId: (state, action) => {
+      state.callData.mySocketId = action.payload;
     },
   },
 });
 
 export const {
-  reduxSetupVideoWith,
   reduxGetVideoCallTrue,
   reduxGetVideoCallFalse,
   reduxSetCallEnded,
   reduxAcceptVideoCall,
   reduxRejectVideoCall,
-  reduxSetVideoSocket,
+  reduxSetMySocketId,
+  reduxSetCallingUser,
+  reduxShowVideoTrue,
+  reduxShowVideoFalse,
 } = makeVideoSlice.actions;
 
 export default makeVideoSlice.reducer;

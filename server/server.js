@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const mongoSanitize = require("express-mongo-sanitize");
 const compression = require("compression");
 const fileUpload = require("express-fileupload");
+const { PeerServer } = require("peer");
 const { Server } = require("socket.io");
 const { socketServer } = require("./SocketServer");
 

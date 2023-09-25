@@ -92,4 +92,24 @@ exports.socketServer = (socket) => {
         .emit("closeTypingToClient", { convo, message });
     }
   });
+
+  //Calls
+  socket.on("call user", ({ userToCall, signal, from, name, picture }) => {
+    //console.log(userToCall, signal, from, name, picture);
+    const user = users.find((user) => user.id === userToCall);
+    //console.log(user);
+    if (user) {
+      socket
+        .to(`${user.socketId}`)
+        .emit("call user", { signal, from, name, picture });
+    }
+  });
+  socket.on("end call user", (userId) => {
+    //console.log(userToCall, signal, from, name, picture);
+    const user = users.find((user) => user.id === userId);
+    //console.log(user);
+    if (user) {
+      socket.to(`${user.socketId}`).emit("end call user");
+    }
+  });
 };

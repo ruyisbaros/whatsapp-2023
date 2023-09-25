@@ -27,17 +27,17 @@ const App = () => {
     }
   }, [loggedUser]);
 
-  //Refresh token
   const reFreshToken = useCallback(async () => {
     try {
       const { data } = await axios.get("/auth/refresh_token");
+      window.localStorage.setItem("registeredUser", JSON.stringify(data.user));
       await dispatch(reduxRegisterUser(data.user));
     } catch (error) {
       console.log(error.response.data.message);
     }
   }, [dispatch]);
   useEffect(() => {
-    reFreshToken();
+    //reFreshToken();
   }, [reFreshToken]);
   return (
     <div className="dark ">
