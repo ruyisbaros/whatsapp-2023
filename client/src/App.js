@@ -11,8 +11,12 @@ import RegisteredRoutes from "./ristrict_routes/RegisteredRoutes";
 import { connectToSocketServer, joinUser } from "./SocketIOConnection";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "./axios";
-import { reduxRegisterUser } from "./redux/currentUserSlice";
-
+import {
+  reduxMakeTokenExpired,
+  reduxRegisterUser,
+} from "./redux/currentUserSlice";
+import { createSocket } from "./redux/socketSlicer";
+/* https://github.com/robertbunch/webrtcCourse */
 const App = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,12 +31,17 @@ const App = () => {
     }
   }, [loggedUser]);
 
+  useEffect(() => {
+    dispatch(createSocket());
+  }, [dispatch]);
+
   const reFreshToken = useCallback(async () => {
     try {
       const { data } = await axios.get("/auth/refresh_token");
       window.localStorage.setItem("registeredUser", JSON.stringify(data.user));
       await dispatch(reduxRegisterUser(data.user));
     } catch (error) {
+      dispatch(reduxMakeTokenExpired());
       console.log(error.response.data.message);
     }
   }, [dispatch]);

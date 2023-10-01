@@ -44,7 +44,7 @@ exports.verifyAccessToken = async (token) => {
         //console.log(error);
         reject(error);
       } else {
-        //console.log(payload);
+        //console.log(resolve());
         resolve(payload);
       }
     });

@@ -59,6 +59,7 @@ export const connectToSocketServer = () => {
     store.dispatch(reduxSetCallingUser({ signal, from, name, picture }));
     store.dispatch(reduxGetVideoCallTrue());
   });
+
   socket.on("end call user", () => {
     store.dispatch(reduxGetVideoCallFalse());
   });
@@ -108,4 +109,10 @@ export const callAUserSocket = ({
 };
 export const endCallUserSocket = (userId) => {
   socket?.emit("end call user", userId);
+};
+export const answerCallUserSocket = ({ signal, to }) => {
+  socket?.emit("answer call user", { signal, to });
+};
+export const rejectCallUserSocket = (userId) => {
+  socket?.emit("reject call user", userId);
 };

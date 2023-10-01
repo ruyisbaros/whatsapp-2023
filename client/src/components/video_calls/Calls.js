@@ -5,7 +5,7 @@ import CallAreaInfo from "./CallAreaInfo";
 import CallAreaActions from "./CallAreaActions";
 import { useSelector } from "react-redux";
 
-const Calls = ({ inComingVideo, myVideo, stream }) => {
+const Calls = ({ inComingVideo, myVideo, answerCall, stream }) => {
   const [showCallActions, setShowCallActions] = useState(false);
   const { callEnded, getCall, callAccepted, mySocketId, videoScreen } =
     useSelector((store) => store.videos.callData);
@@ -30,15 +30,17 @@ const Calls = ({ inComingVideo, myVideo, stream }) => {
           {/* Show videos */}
           <div>
             {/* In coming video */}
-            <div>
-              <video
-                ref={inComingVideo}
-                playsInline
-                muted
-                autoPlay
-                className="largeVideoCall"
-              ></video>
-            </div>
+            {callAccepted && !callEnded && (
+              <div>
+                <video
+                  ref={inComingVideo}
+                  playsInline
+                  muted
+                  autoPlay
+                  className="largeVideoCall"
+                ></video>
+              </div>
+            )}
             {/* My video */}
             <div>
               <video
@@ -54,7 +56,7 @@ const Calls = ({ inComingVideo, myVideo, stream }) => {
           </div>
         </div>
       </div>
-      {getCall && !callAccepted && <Ringing />}
+      {getCall && !callAccepted && <Ringing answerCall={answerCall} />}
     </>
   );
 };

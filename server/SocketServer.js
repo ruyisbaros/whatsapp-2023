@@ -95,7 +95,6 @@ exports.socketServer = (socket) => {
 
   //Calls
   socket.on("call user", ({ userToCall, signal, from, name, picture }) => {
-    //console.log(userToCall, signal, from, name, picture);
     const user = users.find((user) => user.id === userToCall);
     //console.log(user);
     if (user) {
@@ -104,8 +103,10 @@ exports.socketServer = (socket) => {
         .emit("call user", { signal, from, name, picture });
     }
   });
+  socket.on("answer call user", ({ signal, to }) => {
+    socket.to(to).emit("answer call user", { signal });
+  });
   socket.on("end call user", (userId) => {
-    //console.log(userToCall, signal, from, name, picture);
     const user = users.find((user) => user.id === userId);
     //console.log(user);
     if (user) {

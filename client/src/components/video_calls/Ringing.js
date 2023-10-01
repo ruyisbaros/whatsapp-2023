@@ -9,9 +9,9 @@ import {
   reduxShowVideoFalse,
 } from "../../redux/videoSlice";
 
-const Ringing = () => {
+const Ringing = ({ answerCall }) => {
   const dispatch = useDispatch();
-  const { loggedUser } = useSelector((store) => store.currentUser);
+  //const { loggedUser } = useSelector((store) => store.currentUser);
   const { callingUser } = useSelector((store) => store.videos);
   const [ringTimer, setRingTimer] = useState(0);
 
@@ -64,7 +64,7 @@ const Ringing = () => {
               <TiCancel size={25} color="white" />
             </button>
           </li>
-          <li>
+          <li onClick={answerCall}>
             <button className="w-8 h-8 rounded-full flex items-center justify-center bg-green_1">
               <ValidIcon className="w-7 fill-white mt-2" />
             </button>

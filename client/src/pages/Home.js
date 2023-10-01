@@ -8,24 +8,27 @@ import WhatsappHome from "../components/chat/WhatsappHome";
 import ActiveChat from "../components/chat/ActiveChat";
 import Calls from "../components/video_calls/Calls";
 import Peer from "simple-peer";
-import { callAUserSocket } from "../SocketIOConnection";
-import {
-  reduxGetVideoCallFalse,
-  reduxGetVideoCallTrue,
-  reduxShowVideoTrue,
-} from "../redux/videoSlice";
+import { answerCallUserSocket, callAUserSocket } from "../SocketIOConnection";
+import { reduxAcceptVideoCall, reduxShowVideoTrue } from "../redux/videoSlice";
+import { reduxMakeTokenExpired } from "../redux/currentUserSlice";
 
 const Home = () => {
   const myVideo = useRef(null);
   const inComingVideo = useRef(null);
+  const connectionRef = useRef(null);
   const dispatch = useDispatch();
   const { activeConversation, chattedUser } = useSelector(
     (store) => store.messages
   );
-  const { mySocketId } = useSelector((store) => store.videos.callData);
+  const { mySocketId, callAccepted } = useSelector(
+    (store) => store.videos.callData
+  );
+  const { socket } = useSelector((store) => store.sockets);
   const { loggedUser } = useSelector((store) => store.currentUser);
   //const { loggedUser } = useSelector((store) => store.currentUser);
-  console.log(mySocketId);
+  const { callingUser } = useSelector((store) => store.videos);
+  /*  const { callEnded, getCall, callAccepted, mySocketId, videoScreen } =
+    useSelector((store) => store.videos.callData); */
 
   const [stream, setStream] = useState();
   const enableMedia = () => {
@@ -49,6 +52,38 @@ const Home = () => {
         picture: loggedUser.picture,
       });
     });
+    peer.on("stream", (stream) => {
+      inComingVideo.current.srcObject = stream;
+    });
+
+    socket.on("answer call user", ({ signal }) => {
+      peer.signal(signal);
+      dispatch(reduxAcceptVideoCall());
+      dispatch(reduxShowVideoTrue());
+    });
+    connectionRef.current = peer;
+  };
+
+  const answerCall = () => {
+    enableMedia();
+    dispatch(reduxAcceptVideoCall());
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      stream,
+    });
+
+    peer.on("signal", (data) => {
+      answerCallUserSocket({
+        signal: data,
+        to: callingUser?.from,
+      });
+    });
+    peer.on("stream", (stream) => {
+      inComingVideo.current.srcObject = stream;
+    });
+    peer.signal(callingUser?.signal);
+    connectionRef.current = peer;
   };
 
   const setUpMedia = () => {
@@ -73,7 +108,11 @@ const Home = () => {
       console.log(data.filter((dt) => dt.latestMessage));
       dispatch(reduxGetMyConversations(data.filter((dt) => dt.latestMessage)));
     } catch (error) {
-      toast.error(error.response.data.message);
+      if (error.response.data.message === "jwt expired") {
+        dispatch(reduxMakeTokenExpired());
+      } else {
+        toast.error(error.response.data.message);
+      }
     }
   }, [dispatch]);
 
@@ -95,7 +134,12 @@ const Home = () => {
         </div>
       </div>
       {/* Calls */}
-      <Calls myVideo={myVideo} inComingVideo={inComingVideo} stream={stream} />
+      <Calls
+        myVideo={myVideo}
+        inComingVideo={inComingVideo}
+        stream={stream}
+        answerCall={answerCall}
+      />
     </>
   );
 };

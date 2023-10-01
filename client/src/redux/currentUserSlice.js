@@ -7,6 +7,7 @@ const initialState = {
   onLineUsers: onUsers ? JSON.parse(onUsers) : [],
   status: "",
   error: "",
+  tokenExpired: false,
 };
 
 const currentUSlicer = createSlice({
@@ -16,6 +17,12 @@ const currentUSlicer = createSlice({
     reduxLogout: (state, action) => {
       state.status = "";
       state.loggedUser = null;
+    },
+    reduxMakeTokenExpired: (state, action) => {
+      state.tokenExpired = true;
+    },
+    reduxMakeTokenExpiredNone: (state, action) => {
+      state.tokenExpired = false;
     },
     reduxRegisterUser: (state, action) => {
       const { id, email, name, picture, status } = action.payload;
@@ -37,6 +44,8 @@ export const {
   reduxRegisterUser,
   reduxSetOnlineUsers,
   reduxAUserBecameOffline,
+  reduxMakeTokenExpired,
+  reduxMakeTokenExpiredNone,
 } = currentUSlicer.actions;
 
 export default currentUSlicer.reducer;

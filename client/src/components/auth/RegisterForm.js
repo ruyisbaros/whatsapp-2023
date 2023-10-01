@@ -8,7 +8,7 @@ import { PulseLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import axios from "../../axios";
 import { toast } from "react-toastify";
-import { reduxRegisterUser } from "../../redux/currentUserSlice";
+import { reduxMakeTokenExpiredNone, reduxRegisterUser } from "../../redux/currentUserSlice";
 import Picture from "./Picture";
 
 const RegisterForm = () => {
@@ -38,6 +38,7 @@ const RegisterForm = () => {
           JSON.stringify(data.user)
         );
         await dispatch(reduxRegisterUser(data.user));
+        dispatch(reduxMakeTokenExpiredNone());
         toast.success(data.message);
       } else {
         toast.error("Something went wrong! Please try again.");
