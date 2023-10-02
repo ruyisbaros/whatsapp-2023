@@ -9,10 +9,10 @@ import {
   reduxShowVideoFalse,
 } from "../../redux/videoSlice";
 
-const Ringing = ({ answerCall }) => {
+const Ringing = ({ answerCall, call, setCall }) => {
   const dispatch = useDispatch();
   //const { loggedUser } = useSelector((store) => store.currentUser);
-  const { callingUser } = useSelector((store) => store.videos);
+  //const { callingUser } = useSelector((store) => store.videos);
   const [ringTimer, setRingTimer] = useState(0);
 
   let interval;
@@ -46,13 +46,13 @@ const Ringing = ({ answerCall }) => {
         {/* Call infos */}
         <div className="flex items-center gap-x-2 ">
           <img
-            src={callingUser?.picture}
+            src={call?.picture}
             alt="called user"
             className="w-20 h-20 rounded-full "
           />
           <div>
             <h1 className="dark:text-white">
-              <b>{callingUser?.name}</b>
+              <b>{call?.name}</b>
             </h1>
             <span className="dark:text-dark_text_2">Whatsapp video...</span>
           </div>

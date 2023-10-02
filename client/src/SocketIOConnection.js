@@ -9,14 +9,15 @@ import {
 } from "./redux/chatSlice";
 import {
   reduxAUserBecameOffline,
+  reduxSetMySocketId,
   reduxSetOnlineUsers,
 } from "./redux/currentUserSlice";
 import {
   reduxGetVideoCallFalse,
   reduxGetVideoCallTrue,
   reduxSetCallingUser,
-  reduxSetMySocketId,
 } from "./redux/videoSlice";
+import { createSocket } from "./redux/socketSlicer";
 let socket;
 
 export const connectToSocketServer = () => {
@@ -24,6 +25,11 @@ export const connectToSocketServer = () => {
 
   socket.on("connect", () => {
     console.log("Connected to socket io server");
+    store.dispatch(createSocket(socket));
+  });
+  socket.on("setup socketId", (id) => {
+    console.log("remote socket id ", id);
+    store.dispatch(reduxSetMySocketId(id));
   });
   socket.on("new message", (msg) => {
     store.dispatch(reduxAddMyMessagesFromSocket(msg));
@@ -48,20 +54,6 @@ export const connectToSocketServer = () => {
   });
   socket.on("closeTypingToClient", ({ convo, message }) => {
     store.dispatch(reduxStopTyping({ situation: false, convo, message }));
-  });
-
-  /* Videos */
-  socket.on("setup socketId", (id) => {
-    console.log("remote socket id ", id);
-    store.dispatch(reduxSetMySocketId(id));
-  });
-  socket.on("call user", ({ signal, from, name, picture }) => {
-    store.dispatch(reduxSetCallingUser({ signal, from, name, picture }));
-    store.dispatch(reduxGetVideoCallTrue());
-  });
-
-  socket.on("end call user", () => {
-    store.dispatch(reduxGetVideoCallFalse());
   });
 };
 //Emit user activities
@@ -90,29 +82,4 @@ export const userStartMessageTyping = (chattedUserId, typeTo, convo) => {
 
 export const userStopMessageTyping = (chattedUserId, convo, message) => {
   socket?.emit("stop typing", { chattedUserId, convo, message });
-};
-
-export const callAUserSocket = ({
-  userToCall,
-  signal,
-  from,
-  name,
-  picture,
-}) => {
-  socket?.emit("call user", {
-    userToCall,
-    signal,
-    from,
-    name,
-    picture,
-  });
-};
-export const endCallUserSocket = (userId) => {
-  socket?.emit("end call user", userId);
-};
-export const answerCallUserSocket = ({ signal, to }) => {
-  socket?.emit("answer call user", { signal, to });
-};
-export const rejectCallUserSocket = (userId) => {
-  socket?.emit("reject call user", userId);
 };

@@ -8,10 +8,18 @@ import WhatsappHome from "../components/chat/WhatsappHome";
 import ActiveChat from "../components/chat/ActiveChat";
 import Calls from "../components/video_calls/Calls";
 import Peer from "simple-peer";
-import { answerCallUserSocket, callAUserSocket } from "../SocketIOConnection";
 import { reduxAcceptVideoCall, reduxShowVideoTrue } from "../redux/videoSlice";
 import { reduxMakeTokenExpired } from "../redux/currentUserSlice";
-
+const callData = {
+  receivingCall: false,
+  callEnded: false,
+  callAccepted: false,
+  videoScreen: false,
+  name: "",
+  picture: "",
+  callerSocketId: "",
+  signal: "",
+};
 const Home = () => {
   const myVideo = useRef(null);
   const inComingVideo = useRef(null);
@@ -20,31 +28,52 @@ const Home = () => {
   const { activeConversation, chattedUser } = useSelector(
     (store) => store.messages
   );
-  const { mySocketId, callAccepted } = useSelector(
-    (store) => store.videos.callData
-  );
   const { socket } = useSelector((store) => store.sockets);
-  const { loggedUser } = useSelector((store) => store.currentUser);
+  const { loggedUser, mySocketId } = useSelector((store) => store.currentUser);
   //const { loggedUser } = useSelector((store) => store.currentUser);
   const { callingUser } = useSelector((store) => store.videos);
-  /*  const { callEnded, getCall, callAccepted, mySocketId, videoScreen } =
-    useSelector((store) => store.videos.callData); */
 
   const [stream, setStream] = useState();
-  const enableMedia = () => {
-    //inComingVideo.current.srcObject = stream;
-    myVideo.current.srcObject = stream;
+  const [call, setCall] = useState(callData);
+
+  //On Sockets
+  useEffect(() => {
+    if (socket) {
+      socket.on("call user", (data) => {
+        setCall({
+          ...call,
+          callerSocketId: data.from,
+          name: data.name,
+          picture: data.picture,
+          signal: data.signal,
+          receivingCall: true,
+        });
+      });
+    }
+  }, [socket]);
+  console.log(call);
+  const streamMedia = async () => {
+    try {
+      const currentStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false,
+      });
+      setStream(currentStream);
+      myVideo.current.srcObject = currentStream;
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
-  const callUser = () => {
-    enableMedia();
-    dispatch(reduxShowVideoTrue());
+  const callUser = async () => {
+    await streamMedia();
+    setCall({ ...call, name: loggedUser.name, picture: loggedUser.picture });
     const peer = new Peer({
       initiator: true,
       trickle: false,
       stream,
     });
     peer.on("signal", (data) => {
-      callAUserSocket({
+      socket.emit("call user", {
         userToCall: chattedUser._id,
         signal: data,
         from: mySocketId,
@@ -64,8 +93,8 @@ const Home = () => {
     connectionRef.current = peer;
   };
 
-  const answerCall = () => {
-    enableMedia();
+  const answerCall = async () => {
+    await streamMedia();
     dispatch(reduxAcceptVideoCall());
     const peer = new Peer({
       initiator: false,
@@ -74,10 +103,10 @@ const Home = () => {
     });
 
     peer.on("signal", (data) => {
-      answerCallUserSocket({
+      /*  answerCallUserSocket({
         signal: data,
         to: callingUser?.from,
-      });
+      }); */
     });
     peer.on("stream", (currentStream) => {
       inComingVideo.current.srcObject = currentStream;
@@ -85,21 +114,6 @@ const Home = () => {
     peer.signal(callingUser?.signal);
     connectionRef.current = peer;
   };
-
-  const setUpMedia = () => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: false })
-      .then((stream) => {
-        setStream(stream);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  useEffect(() => {
-    setUpMedia();
-  }, []);
 
   const fetchMyConversations = useCallback(async () => {
     try {
@@ -139,6 +153,8 @@ const Home = () => {
         inComingVideo={inComingVideo}
         stream={stream}
         answerCall={answerCall}
+        call={call}
+        setCall={setCall}
       />
     </>
   );

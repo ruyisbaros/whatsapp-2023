@@ -5,7 +5,7 @@ let onUsers = window.localStorage.getItem("onlineUsers");
 const initialState = {
   loggedUser: user ? JSON.parse(user) : null,
   onLineUsers: onUsers ? JSON.parse(onUsers) : [],
-  status: "",
+  mySocketId: null,
   error: "",
   tokenExpired: false,
 };
@@ -15,7 +15,6 @@ const currentUSlicer = createSlice({
   initialState,
   reducers: {
     reduxLogout: (state, action) => {
-      state.status = "";
       state.loggedUser = null;
     },
     reduxMakeTokenExpired: (state, action) => {
@@ -36,6 +35,9 @@ const currentUSlicer = createSlice({
         (usr) => usr.id !== action.payload
       );
     },
+    reduxSetMySocketId: (state, action) => {
+      state.mySocketId = action.payload;
+    },
   },
 });
 
@@ -46,6 +48,7 @@ export const {
   reduxAUserBecameOffline,
   reduxMakeTokenExpired,
   reduxMakeTokenExpiredNone,
+  reduxSetMySocketId,
 } = currentUSlicer.actions;
 
 export default currentUSlicer.reducer;

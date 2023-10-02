@@ -39,9 +39,6 @@ const makeVideoSlice = createSlice({
     reduxRejectVideoCall: (state, action) => {
       state.callData.callAccepted = false;
     },
-    reduxSetMySocketId: (state, action) => {
-      state.callData.mySocketId = action.payload;
-    },
   },
 });
 
@@ -51,7 +48,6 @@ export const {
   reduxSetCallEnded,
   reduxAcceptVideoCall,
   reduxRejectVideoCall,
-  reduxSetMySocketId,
   reduxSetCallingUser,
   reduxShowVideoTrue,
   reduxShowVideoFalse,

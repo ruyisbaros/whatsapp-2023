@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { io } from "socket.io-client";
-import { BACKEND_URL } from "../axios";
-
 const initialState = {
   socket: "",
 };
@@ -12,7 +9,7 @@ const makeSocket = createSlice({
   initialState,
   reducers: {
     createSocket: (state, action) => {
-      state.socket = io(BACKEND_URL);
+      state.socket = action.payload;
     },
   },
 });
