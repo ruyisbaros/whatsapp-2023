@@ -56,7 +56,7 @@ const Home = () => {
       inComingVideo.current.srcObject = stream;
     });
 
-    socket.on("answer call user", ({ signal }) => {
+    socket.on("answer call user", (signal) => {
       peer.signal(signal);
       dispatch(reduxAcceptVideoCall());
       dispatch(reduxShowVideoTrue());
@@ -79,8 +79,8 @@ const Home = () => {
         to: callingUser?.from,
       });
     });
-    peer.on("stream", (stream) => {
-      inComingVideo.current.srcObject = stream;
+    peer.on("stream", (currentStream) => {
+      inComingVideo.current.srcObject = currentStream;
     });
     peer.signal(callingUser?.signal);
     connectionRef.current = peer;
@@ -88,7 +88,7 @@ const Home = () => {
 
   const setUpMedia = () => {
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({ video: true, audio: false })
       .then((stream) => {
         setStream(stream);
       })
