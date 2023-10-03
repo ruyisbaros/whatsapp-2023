@@ -109,11 +109,12 @@ exports.socketServer = (socket, io) => {
   socket.on("answer call user", ({ signal, to }) => {
     io.to(`${to}`).emit("answer call user", signal);
   });
-  socket.on("end call user", (userId) => {
-    const user = users.find((user) => user.id === userId);
-    //console.log(user);
-    if (user) {
+  socket.on("end call user", ({ calle, id }) => {
+    if (calle) {
+      const user = users.find((user) => user.id === id);
       io.to(`${user.socketId}`).emit("end call user");
+    } else {
+      io.to(`${id}`).emit("end call user");
     }
   });
 };

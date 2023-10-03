@@ -18,6 +18,9 @@ const callData = {
   picture: "",
   callerSocketId: "",
   signal: "",
+  audioMuted: false,
+  ringingMuted: false,
+  IamCaller: false,
 };
 const Home = () => {
   const myVideo = useRef(null);
@@ -30,9 +33,8 @@ const Home = () => {
   const { socket } = useSelector((store) => store.sockets);
   const { loggedUser, mySocketId } = useSelector((store) => store.currentUser);
   //const { loggedUser } = useSelector((store) => store.currentUser);
-  const { callingUser } = useSelector((store) => store.videos);
 
-  const [stream, setStream] = useState();
+  const [stream, setStream] = useState("");
   const [call, setCall] = useState(callData);
 
   //On Sockets
@@ -51,7 +53,30 @@ const Home = () => {
     }
   }, [socket]);
 
-  //console.log(call);
+  useEffect(() => {
+    if (socket) {
+      socket.on("end call user", () => {
+        setCall({
+          ...call,
+          callEnded: true,
+          videoScreen: false,
+          IamCaller: false,
+        });
+        myVideo.current.srcObject = null;
+        if (call.callAccepted && !call.callEnded) {
+          connectionRef.current.destroy();
+        }
+      });
+      /* if (myVideo.current || inComingVideo.current) {
+        myVideo.current.srcObject = null;
+        inComingVideo.current.srcObject = null;
+      } */
+
+      //window.location.reload();
+    }
+  }, [socket]);
+
+  console.log(call);
   const enableMedia = () => {
     myVideo.current.srcObject = stream;
   };
@@ -59,7 +84,7 @@ const Home = () => {
     try {
       const currentStream = await navigator.mediaDevices.getUserMedia({
         video: true,
-        audio: false,
+        audio: call.audioMuted,
       });
       setStream(currentStream);
     } catch (error) {
@@ -78,6 +103,7 @@ const Home = () => {
         name: loggedUser.name,
         picture: loggedUser.picture,
         videoScreen: true,
+        IamCaller: true,
       });
       const peer = new Peer({
         initiator: true,
@@ -137,7 +163,31 @@ const Home = () => {
       toast.error(error.message);
     }
   };
+  const handleEndCall = () => {
+    let id;
+    call.IamCaller ? (id = chattedUser._id) : (id = call.callerSocketId);
 
+    socket.emit("end call user", {
+      calle: call.IamCaller,
+      id,
+    });
+    setCall({
+      ...call,
+      callEnded: true,
+      videoScreen: false,
+      IamCaller: false,
+    });
+    /* if (myVideo.current) {
+      myVideo.current.srcObject = null;
+    }
+    if (inComingVideo.current) {
+      inComingVideo.current.srcObject = null;
+    } */
+    //setStream("");
+    myVideo.current.srcObject = null;
+    //connectionRef.current.destroy();
+    //window.location.reload();
+  };
   const fetchMyConversations = useCallback(async () => {
     try {
       const { data } = await axios.get("/conversation/my_conversations");
@@ -178,6 +228,7 @@ const Home = () => {
         call={call}
         setCall={setCall}
         stream={stream}
+        handleEndCall={handleEndCall}
       />
     </>
   );

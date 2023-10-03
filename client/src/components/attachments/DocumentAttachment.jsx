@@ -2,8 +2,8 @@ import React, { useRef } from "react";
 import { toast } from "react-toastify";
 import { reduxAddFile } from "../../redux/chatSlice";
 import { useDispatch } from "react-redux";
-import DocumentIcon from "./../../assets/svg/Document";
-import { getFileType } from "./../../utils/fileTypes";
+import DocumentIcon from "../../assets/svg/Document";
+import { getFileType } from "../../utils/fileTypes";
 
 const DocumentAttachment = () => {
   const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import React from "react";
-import CloseIcon from "./../../../assets/svg/Close";
+import CloseIcon from "../../../assets/svg/Close";
 import { useDispatch, useSelector } from "react-redux";
 import { reduxMakeFilesEmpty } from "../../../redux/chatSlice";
 

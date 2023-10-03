@@ -1,4 +1,5 @@
 require("dotenv").config();
+const webpack = require("webpack");
 const routes = require("./routes/index");
 const express = require("express");
 const cookieSession = require("cookie-session");
@@ -14,6 +15,17 @@ const { Server } = require("socket.io");
 const { socketServer } = require("./SocketServer");
 
 const app = express();
+module.exports = {
+  //...
+  plugins: [
+    // ...
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(process.env),
+    }),
+    // ...
+  ],
+  //...
+};
 //Sockets
 /* https://ineedsomething.herokuapp.com/ */
 const http = require("http").createServer(app);

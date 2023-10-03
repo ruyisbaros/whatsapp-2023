@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import SearchLargeIcon from "./../../assets/svg/SearchLarge";
+import SearchLargeIcon from "../../assets/svg/SearchLarge";
 import DotsIcon from "../../assets/svg/Dots";
 import { dateHandler2 } from "../../utils/momentHandler";
-import { VideoCallIcon } from "./../../assets/svg/VideoCall";
+import { VideoCallIcon } from "../../assets/svg/VideoCall";
 import { CallIcon } from "../../assets/svg";
 import { DialIcon } from "../../assets/svg/Dial";
 

@@ -5,9 +5,9 @@ import {
   PollIcon,
   StickerIcon,
 } from "../../assets/svg";
-import DocumentIcon from "./../../assets/svg/Document";
-import PhotoAttachment from "./../attachments/PhotoAttachment";
-import DocumentAttachment from "./../attachments/DocumentAttachment";
+import DocumentIcon from "../../assets/svg/Document";
+import PhotoAttachment from "../attachments/PhotoAttachment";
+import DocumentAttachment from "../attachments/DocumentAttachment";
 
 const AttachmentMenu = () => {
   return (

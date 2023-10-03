@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import SendIcon from "./../../../assets/svg/Send";
+import SendIcon from "../../../assets/svg/Send";
 import CloseIcon from "../../../assets/svg/Close";
 import { getFileType } from "../../../utils/fileTypes";
 import {

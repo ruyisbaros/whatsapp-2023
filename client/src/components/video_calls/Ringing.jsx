@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { BiSolidVolumeMute } from "react-icons/bi";
+import { GoUnmute } from "react-icons/go";
 import { TiCancel } from "react-icons/ti";
-import { ValidIcon } from "./../../assets/svg/Valid";
+import { ValidIcon } from "../../assets/svg/Valid";
 import sendCall from "../../assets/audio/ringtone.mp3";
 
-const Ringing = ({ answerCall, call, setCall }) => {
+const Ringing = ({ answerCall, call, setCall, handleEndCall }) => {
   const dispatch = useDispatch();
   //const { loggedUser } = useSelector((store) => store.currentUser);
   //const { callingUser } = useSelector((store) => store.videos);
@@ -53,7 +55,20 @@ const Ringing = ({ answerCall, call, setCall }) => {
         </div>
         {/* Call Actions */}
         <ul className="flex items-center gap-x-3 ">
-          <li>
+          <li
+            onClick={() =>
+              setCall({ ...call, ringingMuted: !call.ringingMuted })
+            }
+          >
+            <button className="w-8 h-8 rounded-full flex items-center justify-center bg-red-500">
+              {call.ringingMuted ? (
+                <BiSolidVolumeMute size={25} color="white" />
+              ) : (
+                <GoUnmute size={25} color="white" />
+              )}
+            </button>
+          </li>
+          <li onChange={handleEndCall}>
             <button className="w-8 h-8 rounded-full flex items-center justify-center bg-red-500">
               <TiCancel size={25} color="white" />
             </button>
@@ -66,7 +81,12 @@ const Ringing = ({ answerCall, call, setCall }) => {
         </ul>
       </div>
       {/* Ring Voice */}
-      <audio src={sendCall} autoPlay muted loop></audio>
+      <audio
+        src={sendCall}
+        autoPlay
+        muted={call.ringingMuted ? true : false}
+        loop
+      ></audio>
     </div>
   );
 };

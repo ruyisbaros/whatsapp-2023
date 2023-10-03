@@ -38,7 +38,7 @@ const ChatMessages = () => {
                   : null}
                 {message.message.length > 0 ? (
                   <SingleMessage
-                    key={message._id}
+                    key={message.createdAt}
                     msg={message}
                     me={loggedUser.id === message.sender?._id}
                   />
