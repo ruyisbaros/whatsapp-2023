@@ -21,7 +21,7 @@ const Ringing = ({ answerCall, call, setCall }) => {
       setRingTimer((prev) => prev + 1);
     }, 1000);
   };
-  console.log(ringTimer);
+
   useEffect(() => {
     if (ringTimer <= 30) {
       //setCall((prev) => ({ ...prev, getCall: true }));

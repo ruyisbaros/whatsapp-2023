@@ -8,7 +8,6 @@ import WhatsappHome from "../components/chat/WhatsappHome";
 import ActiveChat from "../components/chat/ActiveChat";
 import Calls from "../components/video_calls/Calls";
 import Peer from "simple-peer";
-import { reduxAcceptVideoCall, reduxShowVideoTrue } from "../redux/videoSlice";
 import { reduxMakeTokenExpired } from "../redux/currentUserSlice";
 const callData = {
   receivingCall: false,
@@ -51,7 +50,18 @@ const Home = () => {
       });
     }
   }, [socket]);
-  console.log(call);
+  /*  useEffect(()=>{
+    if(socket){
+      socket.on("answer call user", (signal) => {
+        peer.signal(signal);
+        setCall({ ...call, callAccepted: true, videoScreen: true });
+      });
+    }
+  },[]) */
+  //console.log(call);
+  const enableMedia = () => {
+    myVideo.current.srcObject = stream;
+  };
   const streamMedia = async () => {
     try {
       const currentStream = await navigator.mediaDevices.getUserMedia({
@@ -59,60 +69,80 @@ const Home = () => {
         audio: false,
       });
       setStream(currentStream);
-      myVideo.current.srcObject = currentStream;
     } catch (error) {
       toast.error(error.message);
     }
   };
+  useEffect(() => {
+    streamMedia();
+  }, []);
+
   const callUser = async () => {
-    await streamMedia();
-    setCall({ ...call, name: loggedUser.name, picture: loggedUser.picture });
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream,
-    });
-    peer.on("signal", (data) => {
-      socket.emit("call user", {
-        userToCall: chattedUser._id,
-        signal: data,
-        from: mySocketId,
+    try {
+      enableMedia();
+      setCall({
+        ...call,
         name: loggedUser.name,
         picture: loggedUser.picture,
+        videoScreen: true,
       });
-    });
-    peer.on("stream", (stream) => {
-      inComingVideo.current.srcObject = stream;
-    });
+      const peer = new Peer({
+        initiator: true,
+        trickle: false,
+        stream,
+      });
+      peer.on("signal", (data) => {
+        socket.emit("call user", {
+          userToCall: chattedUser._id,
+          signal: data,
+          from: mySocketId,
+          name: loggedUser.name,
+          picture: loggedUser.picture,
+        });
+      });
+      peer.on("stream", (lineStream) => {
+        console.log(lineStream);
+        myVideo.current.srcObject = stream;
+        inComingVideo.current.srcObject = lineStream;
+      });
+      socket.on("answer call user", (signal) => {
+        console.log(signal);
+        peer.signal(signal);
+        setCall({ ...call, callAccepted: true, videoScreen: true });
+      });
 
-    socket.on("answer call user", (signal) => {
-      peer.signal(signal);
-      dispatch(reduxAcceptVideoCall());
-      dispatch(reduxShowVideoTrue());
-    });
-    connectionRef.current = peer;
+      connectionRef.current = peer;
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const answerCall = async () => {
-    await streamMedia();
-    dispatch(reduxAcceptVideoCall());
-    const peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream,
-    });
+    try {
+      enableMedia();
+      setCall({ ...call, callAccepted: true, videoScreen: true });
+      const peer = new Peer({
+        initiator: false,
+        trickle: false,
+        stream,
+      });
 
-    peer.on("signal", (data) => {
-      /*  answerCallUserSocket({
-        signal: data,
-        to: callingUser?.from,
-      }); */
-    });
-    peer.on("stream", (currentStream) => {
-      inComingVideo.current.srcObject = currentStream;
-    });
-    peer.signal(callingUser?.signal);
-    connectionRef.current = peer;
+      peer.on("signal", (data) => {
+        socket.emit("answer call user", {
+          signal: data,
+          to: call.callerSocketId,
+        });
+      });
+      peer.on("stream", (currentStream) => {
+        console.log(currentStream);
+        inComingVideo.current.srcObject = currentStream;
+        myVideo.current.srcObject = stream;
+      });
+      peer.signal(call.signal);
+      connectionRef.current = peer;
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const fetchMyConversations = useCallback(async () => {
@@ -151,7 +181,6 @@ const Home = () => {
       <Calls
         myVideo={myVideo}
         inComingVideo={inComingVideo}
-        stream={stream}
         answerCall={answerCall}
         call={call}
         setCall={setCall}

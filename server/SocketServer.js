@@ -1,7 +1,7 @@
 //const { format, formatDistance, formatRelative, subDays } = require("date-fns");
 const User = require("./models/userModel");
 let users = [];
-exports.socketServer = (socket) => {
+exports.socketServer = (socket, io) => {
   console.log(`User with ${socket.id} connected`);
   //Join User (Online)
   socket.on("joinUser", (id) => {
@@ -98,19 +98,22 @@ exports.socketServer = (socket) => {
     const user = users.find((user) => user.id === userToCall);
     //console.log(user);
     if (user) {
-      socket
-        .to(`${user.socketId}`)
-        .emit("call user", { signal, from, name, picture });
+      io.to(`${user.socketId}`).emit("call user", {
+        signal,
+        from,
+        name,
+        picture,
+      });
     }
   });
   socket.on("answer call user", ({ signal, to }) => {
-    socket.to(to).emit("answer call user", signal);
+    io.to(`${to}`).emit("answer call user", signal);
   });
   socket.on("end call user", (userId) => {
     const user = users.find((user) => user.id === userId);
     //console.log(user);
     if (user) {
-      socket.to(`${user.socketId}`).emit("end call user");
+      io.to(`${user.socketId}`).emit("end call user");
     }
   });
 };

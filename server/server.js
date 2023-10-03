@@ -95,7 +95,7 @@ app.use("/api/v1/message", routes.messageRoutes);
 
 //Socket functions
 io.on("connection", (socket) => {
-  socketServer(socket);
+  socketServer(socket, io);
 });
 
 const port = process.env.PORT || 5000;

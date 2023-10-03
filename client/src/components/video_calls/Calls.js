@@ -5,24 +5,17 @@ import CallAreaInfo from "./CallAreaInfo";
 import CallAreaActions from "./CallAreaActions";
 import { useSelector } from "react-redux";
 
-const Calls = ({
-  inComingVideo,
-  myVideo,
-  answerCall,
-  stream,
-  call,
-  setCall,
-}) => {
+const Calls = ({ inComingVideo, myVideo, answerCall, call, setCall }) => {
   const [showCallActions, setShowCallActions] = useState(false);
   const { chattedUser } = useSelector((store) => store.messages);
-  /* ${
-    !videoScreen && !callAccepted ? "hidden" : ""
-  } */
+
   return (
     <>
       <div
         className={`fixed top-1/2 left-1/2 
-  -translate-x-1/2 -translate-y-1/2 z30 w-[360px] h-[550px] rounded-2xl overflow-hidden callBg shadow-lg `}
+  -translate-x-1/2 -translate-y-1/2 z30 w-[360px] h-[550px] rounded-2xl overflow-hidden callBg shadow-lg ${
+    !call.videoScreen && !call.callAccepted ? "hidden" : ""
+  }`}
         onMouseOver={() => setShowCallActions(true)}
         onMouseLeave={() => setShowCallActions(false)}
       >
@@ -30,13 +23,12 @@ const Calls = ({
           <div>
             <Header />
             <CallAreaInfo name={chattedUser?.name} />
-            {/* ? */}
             {showCallActions && <CallAreaActions />}
           </div>
           {/* Show videos */}
           <div>
             {/* In coming video */}
-            {call.callAccepted && !call.callEnded && (
+            {call.callAccepted && !call.callEnded ? (
               <div>
                 <video
                   ref={inComingVideo}
@@ -46,7 +38,7 @@ const Calls = ({
                   className="largeVideoCall"
                 ></video>
               </div>
-            )}
+            ) : null}
             {/* My video */}
             <div>
               <video
