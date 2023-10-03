@@ -4,15 +4,13 @@ import { SpeakerIcon } from "./../../assets/svg/SpeakerIcon";
 import { VideoDialIcon } from "./../../assets/svg/VideoDeal";
 import { DialIcon } from "./../../assets/svg/Dial";
 import { useDispatch, useSelector } from "react-redux";
-import { reduxShowVideoFalse } from "../../redux/videoSlice";
-//import { endCallUserSocket } from "../../SocketIOConnection";
 
 const CallAreaActions = () => {
   const dispatch = useDispatch();
   const { chattedUser } = useSelector((store) => store.messages);
   const handleEndCall = () => {
     //endCallUserSocket(chattedUser._id);
-    dispatch(reduxShowVideoFalse());
+    //dispatch(reduxShowVideoFalse());
   };
   return (
     <div className="absolute bottom-0 h-22 w-full z40 px-1">

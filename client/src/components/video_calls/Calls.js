@@ -5,7 +5,14 @@ import CallAreaInfo from "./CallAreaInfo";
 import CallAreaActions from "./CallAreaActions";
 import { useSelector } from "react-redux";
 
-const Calls = ({ inComingVideo, myVideo, answerCall, call, setCall }) => {
+const Calls = ({
+  inComingVideo,
+  myVideo,
+  answerCall,
+  call,
+  setCall,
+  stream,
+}) => {
   const [showCallActions, setShowCallActions] = useState(false);
   const { chattedUser } = useSelector((store) => store.messages);
 
@@ -22,7 +29,7 @@ const Calls = ({ inComingVideo, myVideo, answerCall, call, setCall }) => {
         <div>
           <div>
             <Header />
-            <CallAreaInfo name={chattedUser?.name} />
+            <CallAreaInfo name={chattedUser?.name} call={call} />
             {showCallActions && <CallAreaActions />}
           </div>
           {/* Show videos */}
@@ -40,17 +47,19 @@ const Calls = ({ inComingVideo, myVideo, answerCall, call, setCall }) => {
               </div>
             ) : null}
             {/* My video */}
-            <div>
-              <video
-                ref={myVideo}
-                playsInline
-                muted
-                autoPlay
-                className={`SmallVideoCall ${
-                  showCallActions ? "moveVideoCall" : ""
-                }`}
-              ></video>
-            </div>
+            {stream ? (
+              <div>
+                <video
+                  ref={myVideo}
+                  playsInline
+                  muted
+                  autoPlay
+                  className={`SmallVideoCall ${
+                    showCallActions ? "moveVideoCall" : ""
+                  }`}
+                ></video>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

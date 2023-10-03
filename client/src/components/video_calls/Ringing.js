@@ -3,11 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { TiCancel } from "react-icons/ti";
 import { ValidIcon } from "./../../assets/svg/Valid";
 import sendCall from "../../assets/audio/ringtone.mp3";
-import {
-  reduxGetVideoCallFalse,
-  reduxGetVideoCallTrue,
-  reduxShowVideoFalse,
-} from "../../redux/videoSlice";
 
 const Ringing = ({ answerCall, call, setCall }) => {
   const dispatch = useDispatch();
@@ -28,8 +23,7 @@ const Ringing = ({ answerCall, call, setCall }) => {
       handleTimer();
     } else if (ringTimer > 10) {
       console.log("Inside else block");
-      dispatch(reduxGetVideoCallFalse());
-      //dispatch(reduxSendVideoCallFalse());
+      setCall({ ...call, receivingCall: false });
     }
     return () => {
       clearInterval(interval);

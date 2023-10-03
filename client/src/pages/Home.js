@@ -50,14 +50,7 @@ const Home = () => {
       });
     }
   }, [socket]);
-  /*  useEffect(()=>{
-    if(socket){
-      socket.on("answer call user", (signal) => {
-        peer.signal(signal);
-        setCall({ ...call, callAccepted: true, videoScreen: true });
-      });
-    }
-  },[]) */
+
   //console.log(call);
   const enableMedia = () => {
     myVideo.current.srcObject = stream;
@@ -184,6 +177,7 @@ const Home = () => {
         answerCall={answerCall}
         call={call}
         setCall={setCall}
+        stream={stream}
       />
     </>
   );

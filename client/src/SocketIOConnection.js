@@ -12,11 +12,7 @@ import {
   reduxSetMySocketId,
   reduxSetOnlineUsers,
 } from "./redux/currentUserSlice";
-import {
-  reduxGetVideoCallFalse,
-  reduxGetVideoCallTrue,
-  reduxSetCallingUser,
-} from "./redux/videoSlice";
+
 import { createSocket } from "./redux/socketSlicer";
 let socket;
 
